@@ -1,0 +1,14 @@
+Metadata-Version: 1.1
+Name: edutalk
+Version: 2.0.0
+Summary: UNKNOWN
+Home-page: https://gitlab.com/IoTtalk/edutalk/
+Author: The EduTalk Team
+Author-email: edutalk@pcs.cs.nctu.edu.tw
+License: UNKNOWN
+Description: UNKNOWN
+Platform: Linux
+Platform: FreeBSD
+Classifier: Development Status :: 3 - Alpha
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: Implementation :: CPython

@@ -1,0 +1,3 @@
+[console_scripts]
+edutalk = edutalk.cli:main
+

@@ -1,0 +1,134 @@
+<link href="{{ url_for('static', filename='css/card.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/select.css') }}" rel="stylesheet">
+
+<div class="card" id='new-card'>
+  <div class='card-block'>
+    <div class='card-text'>
+      <div class='new-card-input-title'>
+        <h3>Lecture</h3>
+        <div class="new-card-row">
+          <div class="new-card-row-title">Name</div>
+          <input type='text' class='new-card-input form-control'
+                 v-model="lecture_name"
+                 id='new-card-name' placeholder='Lecture Name' autofocus>
+          <span class='create-err-msg' v-if="err.type == 'lecture'">
+            [[ err.msg ]]
+          </span>
+        </div>
+        <div class="new-card-row">
+          <div class='new-card-url'>
+            <div class="new-card-row-title">URL</div>
+            <input type="text" class="new-card-input form-control"
+                   v-model="url"
+                   id='new-card-url'  placeholder='HackMD URL' aria-describedby="basic-addon1">
+          </div>
+          <span class='create-err-msg' v-if="err.type == 'url'">
+            [[ err.msg ]]
+          </span>
+        </div>
+      </div>
+
+      <div id='da_block'>
+        <div class='new-card-da'>
+          <h3>Program</h3>
+
+          <div class="new-card-row">
+            <div class="new-card-row-title">Name</div>
+            <input type="text" class="new-card-input form-control"
+                   id="program-name"
+                   v-model="odm"  placeholder='ex. Free-Fall'
+                   aria-describedby="basic-addon1">
+            <span class='create-err-msg' v-if="err.type == 'dm'">
+              [[ err.msg ]]
+            </span>
+          </div>
+
+          <div class="new-card-row">
+            <div class="new-card-row-title">Code</div>
+            <label class='da-template'>
+              <select v-model="vp_template" id='selector' @change="changeTemplate">
+                <option disabled value="">please select one</option>
+                <option v-for="t in t_list">[[ t.name ]]</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="new-card-row" id="df-row">
+            <div class="new-card-row-title">Input</div>
+
+            
+            <label v-for="item, df_name in df_list" style='margin-right: 10px;'>
+              <input type="checkbox" :value="df_name"
+                     v-model="checkedDF" :disabled="checkboxDisabled"> [[ df_name ]]
+            </label>
+            <br>
+            <label v-for="item, df_name in sm_df_list" style='margin-right: 10px;'>
+              <input type="checkbox" :value="df_name"
+                     v-model="smDfInfo" :disabled="checkboxDisabled"> [[ df_name ]]
+            </label>
+            <div class="new-card-row">
+              <input type="text" name="df_name" v-model="new_df_name">
+              <label>
+                <img src="{{ url_for('static', filename='img/sign-add-icon.png') }}" style="width: 20px;" @click="NewDF">
+              </label>
+              <span class='create-err-msg' v-if="err.type == 'df_name'">
+                [[ err.msg ]]
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+        <span class='create-err-msg' v-if="err.type == 'df'">
+          [[ err.msg ]]
+        </span>
+        <div id="df_block">
+          <div class='row' v-for="df_name in checkedDF">
+            <label class='da-template col-xs-2'>
+              <span>[[ df_name ]]</span>
+            </label>
+
+            <select class="col-xs-3" v-model="df_list[df_name].select">
+              <option disabled value="">Please select one</option>
+              <option>text</option>
+              <option>range slider</option>
+            </select>
+            <div class="slider-config col-xs-7" v-if="df_list[df_name].select != 'text' ">
+              <label>Min</label>
+              <input type="number" name="min" v-model.number="df_list[df_name].min" :max="df_list[df_name].max">
+              <label>Max</label>
+              <input type="number" name="max" v-model.number="df_list[df_name].max" :min="df_list[df_name].min">
+              <label>Default</label>
+              <input type="number" name="default" v-model.number="df_list[df_name].default" :min="df_list[df_name].min" :max="df_list[df_name].max">
+            </div>
+          </div>
+          <div class="row" v-for="df_name in checkedSmDF">
+            <label class='da-template col-xs-2'>
+              <span>[[ df_name ]]</span>
+            </label>
+            <select class="col-xs-3" v-model="sm_df_list[df_name].select">
+              <option>[[sm_df_list[df_name].select]]</option>
+            </select>
+          </div>
+          <span class='create-err-msg' v-if="err.type == 'df_parameter'">
+          [[ err.msg ]]
+        </span>
+        </div>
+      </div>
+
+      
+[[ idfs ]]
+[[ odfs ]]
+<!-- [[ req_data ]] -->
+    </div>
+  </div>
+  <div class="save-cancel-btn">
+    <button class="btn btn-default" id="save-new-card-btn" v-on:click="create">
+      Add
+    </button>
+  </div>
+</div>
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/superagent/4.1.0/superagent.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='create-lecture.js') }}"></script>

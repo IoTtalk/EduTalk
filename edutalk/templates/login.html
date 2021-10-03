@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% set title = 'Sign In' %}
+{% set disable_nav = True %}
+
+{% block content %}
+  <div class="login">
+    <div class="login-screen">
+      <div class="app-title containter" style="margin-bottom:10px;">
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+            <h1>Sign In</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-form container">
+        <form method="POST">
+          <div class="row" style="margin-bottom:10px;">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+              <input type="username" name="username" placeholder="Username" value="{{ username }}">
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom:10px;">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+              <input type="password" name="password" placeholder="Password">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+              <input id='sign-in-btn' class="btn btn-primary" type="submit" value="sign in" style="background-color: #36a8d6; border-color:#1e82a9;">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <a href="{{ url_for('account.create_page') }}">sign up</a>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+
+{% set title = 'Tutorial' %}
+{% if lecture %}
+  {% set title = lecture.name + ' | Tutorial' %}
+{% endif %}
+
+{% block head %}
+  <link href="{{ url_for('static', filename='css/tutorial.css') }}" rel="stylesheet">
+  {% include 'vp/head.html' %}
+
+  <script>
+    var data = '{{ lesson_data | tojson | safe }}';
+    var da_name = '{{ lecture.da_name if lecture else '' }}';
+    var lesson = '{{ lecture.id if lecture else '' }}';
+    var df_list = $.parseJSON('{{ df_list | tojson }}');
+    var t_list = JSON.parse('{{ t_list | tojson | safe }}');
+
+    var urls = {
+      vp_index:   '{{ url_for("vp.index",        lec_id=lecture.id) if lecture else "" }}',
+      vp_code:    '{{ url_for("vp.code",         lec_id=lecture.id) if lecture else "" }}',
+      vp_reset:   '{{ url_for("vp.code_reset",   lec_id=lecture.id) if lecture else "" }}',
+      vp_default: '{{ url_for("vp.code_default", lec_id=lecture.id) if lecture else "" }}',
+      rc_index:   '{{ url_for("rc.index",        lec_id=lecture.id, _external=True, token=token) if lecture else "" }}',
+      lecture: {
+        rename:   '{{ url_for("lecture.rename", id_=lecture.id) if lecture else "" }}',
+        reorder:  '{{ url_for("lecture.reorder") }}',
+        create:   '{{ url_for("lecture.create") }}',
+        url:      '{{ url_for("lecture.update_url", id_=lecture.id) if lecture else "" }}',
+        bind: '{{ url_for("lecture.bind", id_=lecture.id) if lecture else "" }}',
+        unbind: '{{ url_for("lecture.unbind", id_=lecture.id) if lecture else "" }}',
+      },
+    }
+  </script>
+  <style>
+    .form-popup {
+      display: none;
+    }
+  </style>
+{% endblock head %}
+
+{% block nav_header %}
+  <a class="navbar-brand" href="#" id="menu-toggle"
+    style="padding-right: 50px; padding-left: 48px;">
+    <img alt="Brand" src="{{ url_for('static', filename='img/favicon.ico') }}"
+    style="width:20px; height:20px;">
+    Contents
+  </a>
+  <script>
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#sidemenu-wrapper").toggleClass("toggled");
+    });
+  </script>
+{% endblock nav_header %}
+
+{% block nav_right %}
+ {% if (current_user.is_teacher or current_user.is_admin) and lecture %}
+  <li>
+    <a class="btn-link" id="editmode-btn">
+      View
+    </a>
+  </li>
+ {% endif %}
+{% endblock nav_right %}
+
+{% block nav_left %}
+  <li id='lecture-btn' class='active'>
+    <a class='states btn-link'>
+      Lecture
+    </a>
+  </li>
+
+  {% if lecture %}
+  <li id='program-btn'>
+    <a class='states btn-link'>
+      Program
+    </a>
+  </li>
+  <li id='animation-btn'>
+    <a class='states btn-link'>
+      Animation
+    </a>
+  </li>
+  {% endif %}  <!-- if lecture -->
+
+  <li onclick="show_QRcode()">
+    <a id="show-qr-btn" class="btn-link">
+      <img alt="show_QRcode" src="{{ url_for('static', filename='img/qrcode.png') }}"
+      style="width:20px; height:20px;">
+    </a>
+  </li>
+  <li>
+    <a id="show-menu-btn" class="open-button" onclick="openForm()">
+      <img alt="show_download_menu" src="{{ url_for('static', filename='img/download.png') }}" style="width:20px; height:20px;">
+    </a>
+  </li>
+  <div class="form-popup" id="myForm">
+  <form class="form-container" action="{{ url_for('lecture.download_data') }}" method="post">
+    <br><label><b>Data Sources</b></label><br>
+    <div id="datasources"  style="overflow: auto;"></div>
+    <script>
+        var rm_string='_O';
+        var change_line = '<br>';
+        for(var df in df_list){
+            console.log('df['+df+']='+df_list[df]);
+            var sensor = df_list[df]; 
+            var s = sensor.indexOf(rm_string);
+            if (s!=-1){
+                sensor = sensor.substring(0,s);
+            }
+            else{
+                continue;
+            }
+            var datasensor = ' <input type="checkbox" id='+df+' name='+sensor+' value='+sensor+' checked />'+sensor+'&nbsp;';            
+            $('#datasources').append(datasensor);
+            if(df%2==0&&df!=0){
+                $('#datasources').append(change_line);
+            }
+        }
+    </script>
+    <label><b>Time Start</b></label><br>
+    輸入日期：
+    <input type="date" id="start_day" name="Ymd_s" max="2286-11-21" min="1970-01-01" value="2019-09-16"><br>
+    輸入小時 (0~23):
+    <input type="number" id="start_H" name="H_s" min="0" max="23" value="0"><br>
+    輸入分 (0~59):
+    <input type="number" id="start_i" name="i_s" min="0" max="59" value="0"><br>
+    輸入秒 (0~59):
+    <input type="number" id="start_s" name="s_s" min="0" max="59" value="0"><br>
+    <input type="hidden" name="op" value="make_Unixtime">
+
+    <label><b>Time End</b></label><br>
+    輸入日期：
+    <input type="date" id="end_day" name="Ymd_e" max="2286-11-21" min="1970-01-01" value="2019-09-16"><br>
+    輸入小時 (0~23):
+    <input type="number" id="end_H" name="H_e" min="0" max="23" value="0"><br>
+    輸入分 (0~59):
+    <input type="number" id="end_i" name="i_e" min="0" max="59" value="0"><br>
+    輸入秒 (0~59):
+    <input type="number" id="end_s" name="s_e" min="0" max="59" value="0"><br>
+    <input type="hidden" name="op" value="make_Unixtime">
+    <button class="btn" type="submit" class="btn" onclick="closeForm()">
+      <a>Download</a>
+    </button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+  </form>
+</div>
+  <li onclick="save_code()"><a class='editor-btn btn-link'>Save</a></li>
+  <li onclick="reset_code()"><a class='editor-btn btn-link'>Reset</a></li>
+
+  {% if current_user.is_teacher or current_user.is_admin %}
+    <li onclick="set_as_default()"><a class='editor-btn btn-link'>Set as Default</a></li>
+  {% endif %}
+{% endblock nav_left %}
+
+{% block sidemenu %}
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand" style='margin-left: -5px;'>
+        <a href="{{ url_for('index') }}">
+          Lecture List
+        </a>
+      </li>
+      {% if current_user.is_teacher or current_user.is_admin %}
+        <li style="margin-bottom: 30px;">
+          <a href='{{ url_for('lecture.create') }}' id='add-new-course'>
+            Add New Lecture
+          </a>
+        </li>
+      {% endif %}
+
+      <div id='lessonList'>
+        {% for item in lesson_data %}
+          <li data-id="{{ item.id }}">
+          <a href="{{ url_for('lecture.detail', id_=item.id)}}" class='lecture-list'>
+            {{ item.name }}
+          </a>
+          </li>
+        {% endfor %}
+      </div>
+
+    </ul>
+  </div> <!-- div#sidebar-wrapper -->
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <!--
+          this is for fixing position
+          need to modify css when you remove  #page-content-wrapper
+        -->
+    </div>
+  </div> <!-- /#page-content-wrapper -->
+{% endblock sidemenu %}
+
+{% block content %}
+  <div class='container-fluid main-div'>
+    <div class='row' id='lecture-content'>
+      <div class='content'>
+          {% if current_user.is_teacher or current_user.is_admin %}
+            <div class='tutorial-editor'>
+              {% if lecture %}
+                {% include 'card.html' %}
+              {% else %}
+                {% include 'new-card.html' %}
+              {% endif %}
+            </div>
+          {% endif %}
+
+          {% if lecture %}
+            {% with url=lecture.url %}
+              {% include 'iframe-resizer.html' %}
+            {% endwith %}
+          {% endif %}
+      </div><!--endof content-->
+    </div><!--endof row-->
+
+    {% if lecture %}
+        {% include 'codemirror.html' %}
+        {% with da_name=lecture.da_name, df_list=df_list %}
+        {% include 'ide.html' %}
+        <script type="text/javascript" src="{{ url_for('static', filename='editor.js') }}"></script>
+
+          {% include 'animation.html' %}
+          {% include 'qrcode.html' %}
+        {% endwith %}
+    {% endif %}
+  </div>
+
+  <script type="text/javascript" src="{{ url_for('static', filename='tutorial.js') }}"></script>
+  {% if (current_user.is_teacher or current_user.is_admin) and lecture %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Sortable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='edit-tutorial.js') }}"></script>
+  {% endif %}
+  <script>
+  function openForm() {
+  document.getElementById("myForm").style.display = "block";
+  var date1 = new Date();
+
+        start_hour = date1.getHours();
+        day=date1.getDate();
+        month = date1.getMonth()+1;
+        start_hour-=1;
+        if (start_hour<0)
+        {
+            start_hour=23;
+            day-=1;
+        }
+        document.getElementById("start_H").value = start_hour;
+        document.getElementById("start_i").value = date1.getMinutes();
+        document.getElementById("start_s").value = date1.getSeconds();
+
+        if (month<10&&day<10)
+            Start_date=date1.getFullYear()+"-0"+month+"-0"+day;
+        else if (month<10)
+            Start_date=date1.getFullYear()+"-0"+month+"-"+day;
+        else if (day<10)
+            Start_date=date1.getFullYear()+"-"+month+"-0"+day;
+        else
+            Start_date=date1.getFullYear()+"-"+month+"-"+day;
+        document.getElementById("start_day").value = Start_date;
+
+
+        if (month<10&&date1.getDate()<10)
+            end_date=date1.getFullYear()+"-0"+month+"-0"+date1.getDate();
+        else if (month<10)
+            end_date=date1.getFullYear()+"-0"+month+"-"+date1.getDate();
+        else if (date1.getDate()<10)
+            end_date=date1.getFullYear()+"-"+month+"-0"+date1.getDate();
+        else
+            end_date=date1.getFullYear()+"-"+month+"-"+date1.getDate();
+        document.getElementById("end_day").value = end_date;
+        document.getElementById("end_H").value = date1.getHours();
+        document.getElementById("end_i").value = date1.getMinutes();
+        document.getElementById("end_s").value = date1.getSeconds();
+  }
+
+  function closeForm() {
+    document.getElementById("myForm").style.display = "none";
+  }
+  </script>
+
+{% endblock content %}

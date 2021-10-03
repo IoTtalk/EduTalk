@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% set title = 'Pending User List' %}
+
+{% block nav_header %}
+  <a class="navbar-brand" href="{{ url_for('index') }}">
+    Home
+  </a>
+{% endblock nav_header %}
+
+{% block nav_left %}
+  <li id='user-list'>
+    <a href="{{ url_for('account.list_') }}">User List</a>
+  </li>
+  <li id='user-list' class="active">
+    <a href="{{ url_for('account.not_approved_list_') }}">Pending User List</a>
+  </li>
+{% endblock nav_left %}
+
+{% block content %}
+  <div class="container" style="margin-top:80px;">
+    <div class="row">
+      <span class="col-md-6" style="display: inline; font-size: 30px;">{{ title }}</span>
+      <div class="col-md-6">
+        <div class="btn btn-default op_btn change_group" data-gid = '2' style="margin-right: 5px;">Teacher</div>
+        <div class="btn btn-default op_btn change_group" data-gid = '3' style="margin-right: 20px;">Student</div>
+        <div class="btn btn-success op_btn" style="margin-right: 5px;">Approve</div>
+        <div class="btn btn-danger op_btn">Reject</div>
+      </div>
+      
+    </div>
+    
+    
+    <div class="row" style="margin:10 70 70 70px;">
+      <div class="col-md-4"></div>
+      <table class="col-md-4 table table-hover">
+        <thead>
+          <tr>
+            <th>
+              <input type="checkbox" class="check_all">
+            </th>
+            {% for x in ["id", "name", "group", "email"] %}
+              <th>{{ x | title }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for u in users %}
+            {% if current_user.username != u.username %}
+            <tr class="user_record not_approved_user" data-uid="{{ u.id }}" data-uname="{{ u.username }}">
+              <td class="col-lg-1">
+                <input type="checkbox">
+              </td>
+              <td class="col-lg-2">{{ u.id }}</td>
+              <td class="col-lg-2">{{ u.username }}</td>
+              <td class="col-lg-2">{{ u.group.name | title }}</td>
+              <td class="col-lg-4"> 
+                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" style="color: #5cb85c"></span>
+                <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: #f8bf1f"></span>
+                {{ u.username }}@gmail.com
+            {% endif %}
+              </td>
+            </tr>
+          {% endfor %} <!-- for users -->
+        </tbody>
+      </table>
+      <div class="col-md-4"></div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog" id="conf_modal">
+    <div class="modal-dialog modal-dialog-centered pwd-modal-dialog" role="document">
+      <div class="modal-content" style="padding-top: 0px;">
+        <div class="modal-body ">
+          <div class="row">
+            <span class="col-lg-12" id="conf_msg"></span>
+          </div>
+          <div class="row">
+            <div class="btn btn-success" id="conf_btn">Yes</div>
+            <div class="btn btn-default" data-dismiss="modal">Cancel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    
+    var check_checkbox = function(e){
+      let checkbox = $(this);
+      if ($(this).is('td')) {
+        checkbox = $(this).parent().find('input[type="checkbox"]');
+      }
+      checkbox.prop('checked', !checkbox.is(':checked')); // Change checked property
+    } ;
+    
+    $('.not_approved_user > td:not(.change_group)').on('click', check_checkbox);
+    $('input[type=checkbox]').on('click', check_checkbox);
+
+    $('.delete_user').on('click', function(){
+      var target_element = $(this).parents('.user_record');
+      var u_id = $(this).parents('.user_record').attr('data-uid');
+
+      $.ajax({
+        url: '{{ url_for("account.index") }}' + u_id,
+        type: 'DELETE',
+        data: {u_id: u_id},
+        success: function() {
+          target_element.remove();
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+          alert(jqXHR.responseText);
+        }
+      });
+    });
+
+    function change_group(users, gid){
+      $.ajax({
+        url: '{{ url_for("account.index") }}' + 'chgrp/' + gid,
+        type: 'POST',
+        contentType: "application/json",
+        dataType: 'json',
+        processData : false,
+        data: JSON.stringify({users: users}),
+        success: function() {
+          window.location = '{{ url_for("account.not_approved_list_") }}';
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+          alert(jqXHR.responseText);
+        }
+      });
+    }
+
+    function change_status(users, op){
+      console.log(op)
+      if(op == 'Approve'){
+        $.ajax({
+          url: '{{ url_for("account.approve") }}',
+          type: 'POST',
+          contentType: "application/json",
+          dataType: 'json',
+          processData : false,
+          data: JSON.stringify({users: users}),
+          success: function() {
+            window.location = '{{ url_for("account.list_") }}';
+          },
+          error: function(jqXHR, textStatus, errorThrown){
+            alert(jqXHR.responseText);
+          }
+        });
+      }else{
+        $.ajax({
+          url: '{{ url_for("account.delete") }}',
+          type: 'POST',
+          contentType: "application/json",
+          dataType: 'json',
+          processData : false,
+          data: JSON.stringify({users: users}),
+          success: function() {
+            window.location = '{{ url_for("account.list_") }}';
+          },
+          error: function(jqXHR, textStatus, errorThrown){
+            alert(jqXHR.responseText);
+          }
+        });
+      }
+    }
+
+
+    $('.op_btn').on('click', function(e){
+      $('#conf_btn').unbind('click');
+      var ulist_html_str = "";
+      let checked = $('input[type=checkbox]:checked');
+      var users = [];
+
+      checked.each(function(idx){
+        users.push(parseInt($(this).parent().parent().attr('data-uid')));
+
+        if(idx < checked.length - 2){
+          ulist_html_str = ulist_html_str + '<b>' + $(this).parent().parent().attr('data-uname')+'</b>, ';
+        }else if(idx == checked.length - 2){
+          ulist_html_str = ulist_html_str + '<b>' + $(this).parent().parent().attr('data-uname')+'</b>, and ';
+        }else{
+          ulist_html_str = ulist_html_str + '<b>' + $(this).parent().parent().attr('data-uname')+'</b>';
+        }
+      });
+      if($(this).attr('data-gid') != undefined){
+        var uid = $(this).parents('.user_record').attr('data-uid');
+        var gid = $(this).attr('data-gid');
+        // [TODO] new user has no ccm_session, delete error
+        if(gid == 2){
+          $('#conf_msg').html('Change<br>'+ulist_html_str+'<br>to teacher?');
+        }else{
+          $('#conf_msg').html('Change<br>'+ulist_html_str+'<br>to student?');
+        }
+        $('#conf_btn').bind('click', function(){change_group(users, gid);}); 
+      }else{
+        $('#conf_msg').html($(this).text()+' '+ulist_html_str+'?');
+        let op = $(this).text();
+        $('#conf_btn').bind('click', function(){change_status(users, op)}); 
+      }
+
+      $('#conf_modal').modal('show');
+    });
+
+  </script>
+{% endblock content %}

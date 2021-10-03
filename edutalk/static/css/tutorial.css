@@ -1,0 +1,117 @@
+.list {
+  margin-top: 50px;
+  font-size:20px;
+}
+.sign {
+  font-size:20px;
+}
+.username {
+  font-size:20px;
+}
+.element {
+  margin: 5px;
+}
+.tmp {
+  margin-right:40px;
+}
+.lesson-title {
+  margin-bottom: 40px;
+}
+.content {
+  width: 80%;
+  float: right;
+  margin-bottom:20px;
+}
+.menu {
+  margin-top: 30px;
+  /*position: fixed;*/
+}
+.CodeMirror {
+  font-size: 15px;
+  width: 100%;
+  height: 100%;
+}
+#IDE {
+  height: 500px;
+  margin-left: 200px;
+}
+.main-div {
+  margin-top: 60px;
+}
+#lecture-content {
+  margin-bottom:100px;
+}
+.btn-custom {
+  color:white;
+  background-color: #46a7d5;
+  transition-duration: 0.2s;
+  border-radius: 1px !important;
+}
+.btn-custom:hover {
+  background-color: #46a7d5;
+  color:white !important;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+}
+.btn-custom:focus {
+  color:white !important;
+}
+.ide-btn-group {
+  margin-bottom: 10px;
+}
+
+.editor-content {
+  margin-top:30px;
+}
+
+.btn-default-no-outline:focus {
+  outline: 0;
+}
+.btn-default-custom:hover, .btn-default-custom:focus {
+  /*
+  background-color: #269ccb;
+  color: white;
+   */
+}
+.edit-move {
+  margin-right: 2px;
+}
+
+.edit-plus {
+  margin-right: 2px;
+}
+
+.icon-active {
+  color:#269ccb;
+}
+.icon-group {
+  margin-top:30px;
+}
+.ide-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+}
+.ide-title > small {
+  color: grey;
+}
+.error-message {
+  color: red;
+  font-size: 12px;
+  font-weight: normal;
+  margin-left:10px;
+  display: none;
+}
+.success-message {
+  color: #6ac259;
+  float: right;
+  font-size: 25px;
+  margin-right: 10px;
+  display: none;
+}
+#animation-content {
+  display: none;
+}
+.container {
+  margin-top: 10px;
+}

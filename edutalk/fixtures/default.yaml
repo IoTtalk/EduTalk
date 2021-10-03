@@ -1,0 +1,328 @@
+- model: Group
+
+  records:
+    - name: administrator
+
+    - name: teacher
+
+    - name: student
+
+# WARNING: Lecture can't have the same dm name with the Template
+- model: Lecture
+
+  records:
+    - name: 行星運動
+      idx: 1
+      url: https://hackmd.io/s/SyHHNSIl7
+      idm: UniverseRC
+      odm: Universe
+      joins: [[RangeSlider1, Gravity, 0], [RangeSlider2, Speed, 0]]
+      code_path: ./src/Universe.py
+
+    - name: 自由落體實驗
+      idx: 2
+      url: https://hackmd.io/s/HJZeINxxQ
+      idm: BallFreeFallRC
+      odm: BallFreeFall
+      joins: [[RangeSlider1, Gravity, 5], [RangeSlider2, Radius, 5]]
+      code_path: ./src/BallFreeFall.py
+
+    - name: 多球體拋物運動實驗
+      idx: 3
+      url: https://hackmd.io/s/HJIMo2uem
+      idm: ProjectileMotionRC
+      odm: ProjectileMotion
+      joins: [[RangeSlider1, Speed, 25], [RangeSlider2, Angle, 0]]
+      code_path: ./src/ProjectileMotion.py
+
+# WARNING: Template dm name should add a prefix "Template_"
+- model: Template
+
+  records:
+    - dm: New
+      code_path: ./src/New-template.py
+
+    - dm: Template_BallFreeFall
+      code_path: ./src/BallFreeFall-template.py
+
+    # TODO: fix BallSpin template source
+
+
+- ccmapi: devicefeature
+
+  records:
+    - name: Number1
+      type: input
+      parameter: 
+        - param_type: float
+
+    - name: Number2
+      type: input
+      parameter: 
+        - param_type: float
+
+    - name: RangeSlider1
+      type: input
+      parameter: 
+        - min: 0.0
+          max: 10.0
+          param_type: float
+
+    - name: RangeSlider2
+      type: input
+      parameter: 
+        - min: 0.0
+          max: 10.0
+          param_type: float
+
+    - name: RangeSlider3
+      type: input
+      parameter: 
+        - min: 0.0
+          max: 10.0
+          param_type: float
+
+    - name: RangeSlider4
+      type: input
+      parameter: 
+        - min: 0.0
+          max: 10.0
+          param_type: float
+
+    - name: RangeSlider5
+      type: input
+      parameter: 
+        - min: 0.0
+          max: 10.0
+          param_type: float
+
+    - name: Radius
+      type: output
+      parameter:
+        - min: 0.0
+          max: 10.0
+          param_type: float
+
+    - name: Acceleration-I
+      type: input
+      parameter:
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0
+          max: 0.0
+          param_type: string
+
+    - name: Acceleration-O
+      type: output
+      parameter:
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0          
+          max: 0.0
+          param_type: string
+
+    - name: Gyroscope-I
+      type: input
+      parameter:
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0
+          max: 0.0
+          param_type: string
+
+    - name: Gyroscope-O
+      type: output
+      parameter:
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0
+          max: 1.0
+          param_type: float
+        - min: 0.0
+          max: 0.0
+          param_type: string
+
+    - name: Orientation-I
+      type: input
+      parameter:
+        - min: 0.0
+          max: 180.0
+          param_type: float
+        - min: 0.0
+          max: 180.0
+          param_type: float
+        - min: 0.0
+          max: 180.0
+          param_type: float
+        - min: 0.0
+          max: 0.0
+          param_type: string
+
+    - name: Orientation-O
+      type: output
+      parameter:
+        - min: 0.0
+          max: 180.0
+          param_type: float
+        - min: 0.0
+          max: 180.0
+          param_type: float
+        - min: 0.0
+          max: 180.0
+          param_type: float
+        - min: 0.0
+          max: 0.0
+          param_type: string
+
+    - name: Magnetometer-I
+      type: input
+      parameter:
+        - min: 0.0
+          max: 360.0
+          param_type: float
+        - min: 0.0
+          max: 360.0
+          param_type: float
+        - min: 0.0
+          max: 360.0
+          param_type: float
+        - min: 0.0
+          max: 0.0
+          param_type: string
+
+    - name: Magnetometer-O
+      type: output
+      parameter:
+        - min: 0.0
+          max: 360.0
+          param_type: float
+        - min: 0.0
+          max: 360.0
+          param_type: float
+        - min: 0.0
+          max: 360.0
+          param_type: float
+        - min: 0.0
+          max: 0.0
+          param_type: string
+
+    - name: Humidity-I
+      type: input
+      parameter:
+        - param_type: float
+        - param_type: string
+
+    - name: Humidity-O
+      type: output
+      parameter:
+        - param_type: float
+        - param_type: string
+
+    - name: UV-I
+      type: input
+      parameter:
+        - param_type: float
+        - param_type: string
+
+    - name: UV-O
+      type: output
+      parameter:
+        - param_type: float
+        - param_type: string
+
+    - name: Alcohol-I
+      type: input
+      parameter:
+        - param_type: float
+        - param_type: string
+
+    - name: Alcohol-O
+      type: output
+      parameter:
+        - param_type: float
+        - param_type: string
+
+
+- ccmapi: devicemodel
+
+  records:
+    - name: ProjectileMotion
+      dfs:
+        - key: Speed
+          parameter:
+            - min: 0
+              max: 100
+              param_type: float
+        - key: Angle
+          parameter:
+            - min: 0
+              max: 90
+              param_type: float
+
+    - name: ProjectileMotionRC
+      dfs:
+        - key: RangeSlider1
+        - key: RangeSlider2
+
+    - name: BallFreeFall
+      dfs:
+        - key: Gravity
+          parameter:
+            - min: 0
+              max: 10
+              param_type: float
+        - key: Radius
+          parameter:
+            - min: 0
+              max: 10
+              param_type: float
+
+    - name: BallFreeFallRC
+      dfs:
+        - key: RangeSlider1
+        - key: RangeSlider2
+
+    - name: Universe
+      dfs:
+        - key: Speed
+          parameter:
+            - min: 0
+              max: 10
+              param_type: float
+        - key: Gravity
+          parameter:
+            - min: 0
+              max: 10
+              param_type: float
+
+    - name: UniverseRC
+      dfs:
+        - key: RangeSlider1
+        - key: RangeSlider2
+
+    # TODO: MobileBox

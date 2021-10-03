@@ -1,0 +1,62 @@
+<link href="{{ url_for('static', filename='css/bootstrap4-btn.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/card.css') }}" rel="stylesheet">
+
+<div class="card edit-lesson lecture-card" style="margin:0px auto;">
+  <div class='card-block lecture-card-block'>
+
+    {% set card_title = lecture.name %}
+    {% set url = lecture.url %}
+    {% set da_name = lecture.odm %}
+
+    <div class='card-text'>
+      <h4 class='card-title'>
+        <div class='card-lesson-title'>
+          <span class='card-title-text'>{{ card_title }}</span>
+          <a class="rename-btn">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+          </a>
+          <div class='success-message'>
+            <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+          </div>
+        </div>
+        <div class='card-input-title'>
+          <input type='text' class='card-input form-control' value='{{ card_title }}'>
+          <button class='btn btn-success btn-outline save-lesson-rename-btn'>Save</button>
+          <button class='btn btn-default btn-outline cancel-lesson-rename-btn'>Cancel</button>
+          <div class='error-message'>Error</div>
+        </div>
+      </h4>
+
+      <div class='url row'>
+        <div class="input-group">
+          <input type="text" class="form-control" id='url-input' value='{{ url }}' aria-describedby="basic-addon1">
+          <span class="input-group-btn">
+            <a href= '{{ url }}'
+              target='_blank'
+              class="btn btn-default btn-default-no-outline goto-hackmd"
+              type="button"
+              style='height:33.99'>
+              <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+              Go to URL
+            </a>
+          </span>
+        </div>
+
+      </div>
+
+      <div class='program-config row'>
+        <h4>Program Name</h4>
+        <div class='da-info'>
+          <label style="margin-right: 20px;">{{ da_name }}</label>
+          {% for df in df_list %}
+            <span class="label df-label">{{ df }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <a class='btn btn-custom' id='delete-lesson-btn' href="{{ url_for('lecture.delete', id_=lecture.id)}}">
+        Delete Lecture
+      </a>
+    </div>
+  </div>
+</div>

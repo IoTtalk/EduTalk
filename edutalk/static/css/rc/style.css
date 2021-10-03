@@ -1,0 +1,52 @@
+input {
+	width: 150px;
+}
+
+h4, div {
+	font-family: monospace, Arial, Sans-serif;
+	font-weight: normal;
+}
+
+section>h4{
+	padding-left: 12px;
+}
+
+.error-msg {
+	font-family: monospace, Arial, Sans-serif;
+	color: red;
+	margin-top: -3px;
+}
+
+.idf-block {
+	margin-bottom: 30px;
+}
+
+.idf-title {
+	font-family: monospace, Arial, Sans-serif;
+	margin-bottom: 5px;
+}
+
+input[type=text]{
+	width:100%;
+	border:2px solid #aaa;
+	border-radius:4px;
+	margin:8px 0;
+	outline:none;
+	padding:8px;
+	box-sizing:border-box;
+	transition:.3s;
+}
+
+input[type=text]:focus{
+	border-color:dodgerBlue;
+	box-shadow:0 0 8px 0 dodgerBlue;
+}
+
+.hint-message {
+	display: none;
+	color: red;
+	padding-left: 12px;
+}
+
+
+

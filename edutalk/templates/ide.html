@@ -1,0 +1,19 @@
+<div class='row'>
+  <div class='col-md-1'></div>
+  <div class="col-md-10" id="IDE">
+    <script>
+      $(function(){
+        dm_name = '{{ da_name }}';
+        editor_init();
+      });
+    </script>
+
+    <span class='ide-title' style='display:none'>Example:  <small>{{da_name}}</small></span>
+
+    <div class="alert alert-danger alert-dismissible" id="error-message" role="alert" style="display:none;">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <strong id='error-type'>Error!</strong>
+      <span id='error-content'>error message</span>
+    </div>
+  </div>
+</div>

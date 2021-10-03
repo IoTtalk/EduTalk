@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  <link href="{{ url_for('static', filename='css/demo.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/QRcode-modal.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/animation.css') }}" rel="stylesheet">
+  {% include 'vp/head.html' %}
+  <script type="text/javascript" src="{{ url_for('static', filename='js/qrcode.min.js') }}"></script>
+  <script>
+    var vp_index = '{{ url_for("vp.index", lec_id=lecture.id) if lecture else "" }}';
+    // var da_name = '{{ lecture.da_name }}';
+    var rc_index = '{{ url_for("rc.index", lec_id=lecture.id, _external=True, token=token) if lecture else "" }}';
+  </script>
+  <script type="text/javascript" src="{{ url_for('static', filename='demo.js') }}"></script>
+{% endblock head %}
+
+{% block nav_right %}
+  <li>
+    <a href="{{ url_for('index') }}">Home</a>
+  </li>
+{% endblock nav_right %}
+
+{% block sidemenu %}
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand" style='margin-left: -5px;'>
+        <a href="javascript:void(0);" style='font-size: 25px;'>
+          Animation List
+        </a>
+      </li>
+      <div id='lessonList'>
+        {% for item in lesson_data %}
+          <li data-id="{{ item.id }}">
+          <a href="{{ url_for('demo.refresh', id_=item.id)}}" class='lecture-list'>
+            {{ item.name }}
+          </a>
+          </li>
+        {% endfor %}
+      </div>
+    </ul>
+  </div> <!-- div#sidebar-wrapper -->
+{% endblock sidemenu %}
+
+{% block content %}
+  <div class='container'>
+    <div class='row lessons'>
+      <div class='col-sm-2 col-md-2 col-lg-1'>
+      </div>
+      <div class='col-xs-12 col-sm-8 col-md-8 col-lg-9'>
+        <!-- show vPython animation -->
+        {% if lecture %}
+          {% with da_name=lecture.da_name %}
+            <div id='animation-content' style="display: block;">
+              <div>
+                <div id="div4">
+                  <iframe id="device-iframe" src="" frameborder="0" ></iframe>
+                </div>
+              </div>
+            </div>
+          {% endwith %}
+        {% endif %}
+      </div>
+      <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+          <!-- show QR code -->
+          <div>
+            <br><br><br><br><br>
+            <canvas id="qrcode"></canvas>
+          </div>
+      </div>
+    </div>
+  </div>
+  {% if lecture %}
+    <script>
+      QRCode.toCanvas(document.getElementById('qrcode'), rc_index, {
+            width: 250,
+          },
+          function (error) {
+            if (error)
+              console.error(error)
+          console.log(rc_index);
+        }
+      )
+    </script>
+  {% endif %}
+{% endblock content %}

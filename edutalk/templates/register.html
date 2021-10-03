@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% set title = 'Sign Up' %}
+{% set disable_nav = True %}
+
+{% block content %}
+
+<div class="register">
+  <div class="register-screen">
+    <div class="app-title containter" style="margin-bottom:10px;">
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <h1>Sign Up</h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="register-form container">
+      <form method="POST">
+        <div class="row" style="margin-bottom:10px;">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+            <input type="username" name="username" placeholder="Username">
+          </div>
+        </div>
+
+        <div class="row" style="margin-bottom:10px;">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+            <input type="password" name="password" placeholder="Password">
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+            <input id="sign-up-btn" class="btn btn-primary" type="submit" value="sign up">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <a href="{{ url_for('account.login_page') }}">sign in</a>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

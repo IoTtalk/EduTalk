@@ -1,0 +1,253 @@
+.card {
+  height:300px;
+  width: 800px;
+  margin-bottom: 30px;
+
+  font-size: 1em;
+  /*overflow: hidden;*/
+  padding: 0;
+  /*border: none;*/
+  border-radius: 1px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  /*box-shadow: 0 1px 0px 0 #ccc, 0 0 0 1px #ccc;*/
+
+}
+
+.card-block {
+  height: 300px;
+
+  font-size: 1em;
+  position: relative;
+  margin: 0;
+  padding: 1em;
+  padding-left: 2.5em;
+  border: none;
+  /*border-top: 1px solid rgba(34, 36, 38, .1);*/
+  box-shadow: none;
+}
+
+.card-title {
+  font-size: 1.28571429em;
+  font-weight: 700;
+  line-height: 1.2857em;
+  height: 34px;
+}
+
+.card-text {
+  clear: both;
+  margin-top: .5em;
+  color: rgba(0, 0, 0, .68);
+}
+
+.card-footer {
+  font-size: 1em;
+  position: static;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  padding: .75em 1em;
+  color: rgba(0, 0, 0, .4);
+  border-top: 1px solid rgba(0, 0, 0, .05) !important;
+  background: #fff;
+}
+
+.card-inverse .btn {
+  border: 1px solid rgba(0, 0, 0, .05);
+}
+
+.da-menu {
+  /*
+  margin-bottom: 80px;
+  */
+  margin-top: 15px;
+}
+
+.url {
+  width: 50%;
+  margin-bottom: 30px;
+  margin:30px;
+}
+
+.form-control:focus {
+  /* border-color: rgba(70, 167, 213, 0.2); */
+  /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(70, 167, 213, 0.5); */
+  border-color: #DCDFE6;
+  box-shadow: 0 0px 0 #ccc, 0 -1px #fff inset;
+  outline: 0 none;
+}
+
+.rename-btn {
+  margin-left: 2px;
+  color: #85ce61;
+}
+.rename-btn:hover {
+  cursor: pointer;
+  color: #5f9942;
+}
+.card-input-title {
+  display: none;
+}
+.card-input-title > input.card-input {
+  width: 200px;
+  display: inline;
+  margin-right: 0px;
+}
+.card-input-title > .save-lesson-name-btn {
+  margin-left: 0px;
+}
+
+#new-card {
+  min-height: 550px;
+  height: auto;
+  width: 800px;
+  margin-left: 200px;
+}
+#new-card .card-block {
+  min-height: 550px;
+  height: auto;
+}
+
+.new-card-input {
+  width: 500px;
+  box-shadow: none;
+  border-radius: 1px;
+  border-bottom: 1px solid #ccc;
+}
+.new-card-da-menu {
+  margin-bottom: 100px;
+}
+
+.save-cancel-btn > .btn {
+  width: 100px;
+  float: right;
+  margin-left: 5px;
+  border-radius: 1px;
+  margin-top: 10px;
+}
+.save-cancel-btn > .btn:hover {
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+}
+
+#delete-lesson-btn {
+  width: 150px;
+  background-color: #55555599;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+#delete-lesson-btn:hover {
+  /* background-color: #f56c6c; */
+  background-color: #f44336;
+  box-shadow: none;
+  /* border-color: #f56c6c; */
+  color: white;
+}
+#new-da-input {
+/*
+  position: absolute;
+  bottom: 0;
+*/
+  height: 34px;
+  margin-left: 2px;
+  display: none;
+  width: 300px;
+}
+.new-da-card {
+  display: none;
+}
+.program-config {
+  margin-top: 30px;
+  margin-left: 30px;
+}
+.animation-config {
+  margin-top: 30px;
+  margin-left: 30px;
+}
+.da-dropdown-menu {
+  border-radius: 1px !important;
+}
+#url-input {
+  border-radius: 1px !important;
+}
+.goto-hackmd {
+  border-radius: 1px !important;
+}
+.btn-square {
+  border-radius: 2px !important;
+}
+#da_block {
+  width: 700px;
+  margin-top: 30px;
+  border-top: 1px solid #ccc;
+}
+#df_title {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.new-card-input {
+  width: 200px;
+}
+.create-err-msg {
+  color: red;
+}
+.new-card-input-title {
+  height: 180px;
+}
+.template-title {
+  font-weight: bold;
+	margin-bottom: 10px;
+}
+.da-info span:nth-of-type(6n+1) {
+  background: #00bcd4;
+}
+.da-info span:nth-of-type(6n+2) {
+  background: #ff9800;
+}
+.da-info span:nth-of-type(6n+3) {
+  background: #4caf50;
+}
+.da-info span:nth-of-type(6n+4) {
+  background: #3379b7;
+}
+.da-info span:nth-of-type(6n+5) {
+  background: #777;
+}
+.da-info span:nth-of-type(6n+6) {
+  background: #d9534e;
+}
+#df_block>div {
+  margin-top: 10px;
+}
+#df_block .row:nth-of-type(5n+1) label{
+  color: #00bcd4;
+}
+#df_block .row:nth-of-type(5n+2) label{
+  color: #ff9800;
+}
+#df_block .row:nth-of-type(5n+3) label{
+  color: #4caf50;
+} 
+#df_block .row:nth-of-type(5n+4) label{
+  color: #3379b7;
+}
+#df_block .row:nth-of-type(5n+5) label{
+  color: #c073f1;
+}
+
+.new-card-row-title{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.slider-config{
+  display: inline;
+}
+
+.slider-config input{
+  width: 5em;
+}

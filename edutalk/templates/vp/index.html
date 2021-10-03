@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vp-resource/jquery.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vp-resource/jquery.mousewheel.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vp-resource/jquery-ui.custom.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vp-resource/RScompiler.2.9.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vp-resource/RSrun.2.9.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vp-resource/compiler.2.9.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vp-resource/glow.2.9.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vp-resource/symbols.2.9.min.js') }}"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vp-resource/csmapi.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/dai.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/dan.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/csmapi.js') }}"></script>
+
+  <title>VPython</title>
+
+  <script type="text/javascript">
+    var dev = '{{ dev }}';
+    var urls = {
+      vp_code: "{{ url_for('vp.code', lec_id=lecture.id) }}",
+      csm_url: '{{ csm_url }}',
+      vp_bind: function(id) {
+        return '{{ url_for("vp.bind", lec_id=lecture.id, mac_addr="")}}' + id
+      },
+    }
+  </script>
+</head>
+
+<body>
+  <div id="device-name"></div>
+  <div id="glowscript" class="glowscript"></div>
+
+  <script src="{{ url_for('static', filename='js/vp-resource/app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% set title = 'User List' %}
+
+{% block nav_header %}
+  <a class="navbar-brand" href="{{ url_for('index') }}">
+    Home
+  </a>
+{% endblock nav_header %}
+
+{% block content %}
+  <div class="container" style="margin-top:80px;">
+    <h2>{{ title }}</h2>
+    <div class="row" style="margin:70px;">
+      <div class="col-md-4"></div>
+      <table class="table col-md-4">
+        <thead>
+          <tr>
+            {% for x in ["id", "name", "group"] %}
+              <th>{{ x | title }}</th>
+            {% endfor %}
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for u in users %}
+            <tr class="user_record" data-uid="{{ u.id }}">
+              <td class="col-lg-2">{{ u.id }}</td>
+              <td class="col-lg-2">{{ u.username }}</td>
+              <td class="col-lg-2">
+                <div class="dropdown hidden_flag">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="privileges">
+                      {{ u.group.name | title }}
+                    </span>
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    {% for g in groups %}
+                      <li>
+                        <a href="#" class="select_privileges" data-gid="{{ g.id }}">
+                          {{ g.name | title }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </td>
+              <td class="col-lg-2">
+                <button type="button" class="delete_user btn btn-danger">x</button>
+              </td>
+            </tr>
+          {% endfor %} <!-- for users -->
+        </tbody>
+      </table>
+      <div class="col-md-4"></div>
+    </div>
+  </div>
+
+  <script>
+    $('.delete_user').on('click', function(){
+      var target_element = $(this).parent().parent();
+      var u_id = $(this).parent().parent().attr('data-uid');
+
+      $.ajax({
+        url: '{{ url_for("account.index") }}' + u_id,
+        type: 'DELETE',
+        data: {u_id: u_id},
+        success: function() {
+          target_element.remove();
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+          alert(jqXHR.responseText);
+        }
+      });
+
+
+    });
+
+    $('.select_privileges').on('click', function(){
+      var uid = $(this).parents('.user_record').attr('data-uid');
+      var gid = $(this).attr('data-gid');
+
+      $.ajax({
+        url: '{{ url_for("account.index") }}' + uid + '/chgrp/' + gid,
+        type: 'POST',
+        headers: {'x-csrf-token': "{{ csrf_token() }}"},
+        success: function(){
+          window.location = '{{ url_for("account.list_") }}';
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+          alert(jqXHR.responseText);
+        }
+      });
+    });
+  </script>
+{% endblock content %}

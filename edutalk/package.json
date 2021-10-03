@@ -1,0 +1,10 @@
+{
+  "name": "edutalk",
+  "version": "2.0.0",
+  "repository": "git@gitlab.com:IoTtalk/EduTalk/iottalk_edu.git",
+  "author": "Edutalk Team <edutalk@pcs.cs.nctu.edu.tw>",
+  "dependencies": {
+    "qrcode": "^1.3.3",
+    "sortablejs": "^1.8.4"
+  }
+}

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Control Panel {{ dm_name }} | EduTalk</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rc/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rc/slider.css') }}" />
+    <link href="//stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.3.2/rangeslider.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
+    <link href="{{ url_for('static', filename='css/rc/modal.css') }}" rel="stylesheet">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.11.1.min.js') }}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.3.2/rangeslider.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/dai.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/dan.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/csmapi.js') }}"></script>
+    <script src="//stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+
+  <body>
+    <script>
+      var dev = "{{ dev }}";
+      var dm_name = "{{ dm_name }}";
+      var idf_list = {{ idf_list | tojson }};
+      var urls = {
+        csm_url: '{{ csm_url }}',
+        rc_bind: function(id) {
+          return '{{ url_for("rc.bind", lec_id=lecture.id, mac_addr="")}}' + id
+        },
+      };
+    </script>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="permission_modal">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h3>Click to start.</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% for j in joins %}
+        {% if 'Number' in j.idf %}
+          <div class='column' name="{{ j.idf }}">
+              <div class='idf-title'>{{ j.odf }}</div>
+              <input type="number" class="input-num">
+              <button class='submit-btn'>OK</button>
+              <p class='error-msg' style="display: none">input is not in a valid number format</p>
+          </div>
+
+        {% elif 'RangeSlider' in j.idf %}
+          <div class="slidecontainer idf-block">
+            <div class="column slider">
+              {%- if '_' in j.odf -%}
+              <h4>{{ j.odf[j.odf.find('_')+1:] }}</h4>
+              {%- else -%}
+              <h4>{{ j.odf }}</h4>
+              {%- endif -%}
+              <input type="range" min="{{ j.min }}" max="{{ j.max }}" step="0.01"
+              value="{{ j.default }}" data-idf-name="{{ j.idf }}">
+            </div>
+          </div>
+
+        {% elif 'Acceleration' in j.idf %}
+          <div class="idf-block">
+            <section>
+              <h4>Acceleration
+                <button class="btn btn-danger control_btn motion_btn" id='acc_btn'>off</button>
+              </h4>
+            </section>
+            <section>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>x</i></label>
+                <span id="Ax"></span>
+              </div>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>y</i></label>
+                <span id="Ay"></span>
+              </div>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>z</i></label>
+                <span id="Az"></span>
+              </div>
+              <div class="col col-xs-12 col-sm-12">
+                <label><i>time</i></label>
+                <span id="Atime"></span>
+              </div>
+            </section>
+          </div>
+
+        {% elif 'Gyroscope' in j.idf %}
+          <div class="idf-block">
+            <section>
+              <h4>Gyroscope
+                <button class="btn btn-danger control_btn motion_btn" id='gyr_btn'>off</button>
+              </h4>
+            </section>
+            <section>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>&alpha;</i></label>
+                <span id="Gx"></span>
+              </div>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>&beta;</i></label>
+                <span id="Gy"></span>
+              </div>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>&gamma;</i></label>
+                <span id="Gz"></span>
+              </div>
+              <div class="col col-xs-12 col-sm-12">
+                <label><i>time</i></label>
+                <span id="Gtime"></span>
+              </div>
+            </section>
+          </div>
+
+        {% elif 'Orientation' in j.idf %}
+          <div class="idf-block">
+            <section>
+              <h4>Orientation
+                <button class="btn btn-danger control_btn" id='ori_btn'>off</button>
+              </h4>
+            </section>
+            <section>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>&alpha;</i></label>
+                <span id="Ox"></span>
+              </div>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>&beta;</i></label>
+                <span id="Oy"></span>
+              </div>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>&gamma;</i></label>
+                <span id="Oz"></span>
+              </div>
+              <div class="col col-xs-12 col-sm-12">
+                <label><i>time</i></label>
+                <span id="Otime"></span>
+              </div>
+            </section>
+          </div>
+
+        {% elif 'Magnetometer' in j.idf %}
+          <div class="idf-block">
+            <section>
+              <h4>Magnetometer
+                <button class="btn btn-success control_btn" id='mag_btn'>on</button>
+              </h4>
+            </section>
+            <section>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>x</i></label>
+                <span id="Mx"></span>
+              </div>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>y</i></label>
+                <span id="My"></span>
+              </div>
+              <div class="col col-xs-4 col-sm-4">
+                <label><i>z</i></label>
+                <span id="Mz"></span>
+              </div>
+              <div class="col col-xs-12 col-sm-12">
+                <label><i>time</i></label>
+                <span id="Mtime"></span>
+              </div>
+            </section>
+          </div>
+
+        {% elif 'Humidity' in j.idf %}
+          <div class="idf-block">
+            <section>
+              <h4>Humidity
+                <button class="btn btn-success control_btn morsensor_btn" id='hum_btn'>on</button>
+              </h4>
+            </section>
+            <section>
+              <div class="col col-xs-4 col-sm-4">
+                <span id="hum_value"></span>
+              </div>
+              <div class="col col-xs-12 col-sm-12">
+                <label><i>time</i></label>
+                <span id="hum_time"></span>
+              </div>
+            </section>
+          </div>
+
+        {% elif 'UV' in j.idf %}
+          <div class="idf-block">
+            <section>
+              <h4>UV
+                <button class="btn btn-success control_btn morsensor_btn" id='uv_btn'>on</button>
+              </h4>
+            </section>
+            <section>
+              <div class="col col-xs-4 col-sm-4">
+                <span id="uv_value"></span>
+              </div>
+              <div class="col col-xs-12 col-sm-12">
+                <label><i>time</i></label>
+                <span id="uv_time"></span>
+              </div>
+            </section>
+          </div>
+
+        {% elif 'Alcohol' in j.idf %}
+          <div class="idf-block">
+            <section>
+              <h4>Alcohol
+                <button class="btn btn-success control_btn morsensor_btn" id='alc_btn'>on</button>
+              </h4>
+            </section>
+            <section>
+              <div class="col col-xs-4 col-sm-4">
+                <span id="alc_value"></span>
+              </div>
+              <div class="col col-xs-12 col-sm-12">
+                <label><i>time</i></label>
+                <span id="alc_time"></span>
+              </div>
+            </section>
+          </div>
+
+        {% endif %}
+
+    {% endfor %}
+
+    <span class='hint-message'>Morsensor not pluged in<br></span>
+    <span class='hint-message'>Auto turn off control button.</span>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/rc/sensor.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/rc/main.js') }}"></script>
+  </body>
+</html>

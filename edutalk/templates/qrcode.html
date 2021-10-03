@@ -1,0 +1,46 @@
+<link href="{{ url_for('static', filename='css/QRcode-modal.css') }}" rel="stylesheet">
+
+<div class="modal fade" tabindex="-1" role="dialog" id="Qrcode_modal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="close-modal" data-dismiss="modal">
+        <div class="slash">
+          <div class="backslash"></div>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <h3>Please scan the QR code.</h3>
+
+        <div>
+          <canvas id="qrcode"></canvas>
+        </div>
+
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='js/qrcode.min.js') }}"></script>
+        <script>
+          QRCode.toCanvas(document.getElementById('qrcode'), urls.rc_index, {
+                width: 250,
+              },
+              function (error) {
+                if (error)
+                  console.error(error)
+              console.log('success!');
+            }
+          )
+        </script>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function show_QRcode() {
+    console.log('show_QRcode da_name:', da_name);
+    $('#Qrcode_modal').modal('show');
+  }
+
+  $(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>

@@ -1,0 +1,197 @@
+.show {
+  display: inline !important;
+}
+
+.alert {
+  margin: 0;
+}
+
+.glyphicon-custom {
+  margin-right: 2px;
+}
+
+.nav-element {
+	padding-right:100px ;	
+}
+
+.navbar {
+  min-height: 0px;
+  margin-bottom: 0px;
+  box-shadow: 0 -1px #fff inset;
+}
+
+.navbar li {
+  height: 40px;
+}
+
+.navbar-brand,
+.navbar-nav li a {
+    line-height: 40px;
+    height: 40px;
+    padding: 10px 15px;
+    padding-top: 0;
+    text-decoration: none;
+    color: #777;
+}
+
+nav li a.editor-btn, #show-qr-btn, #show-menu-btn {
+  display: none;
+}
+.navbar-default .navbar-nav > li > a.editor-btn, #show-qr-btn {
+  color: #008F95;
+}
+.navbar-default .navbar-nav > li > a.editor-btn:hover, #show-qr-btn:hover{
+  color: #94618E;
+}
+
+
+.navbar-default .navbar-nav > .active > a.states,
+.navbar-default .navbar-nav > .active > a.states:focus,
+.navbar-default .navbar-nav > .active > a.states:hover
+{
+/*
+ * states - active
+*/
+}
+
+.navbar-default .navbar-nav > li > a.states,
+.navbar-default .navbar-nav > li > a.states:focus,
+.navbar-default .navbar-nav > li > a.states:hover,
+.navbar-default .navbar-nav > .active > a.states,
+.navbar-default .navbar-nav > .active > a.states:focus,
+.navbar-default .navbar-nav > .active > a.states:hover
+{
+/*
+ * states - text color
+*/
+}
+.navbar-default .navbar-nav > li > a.states:focus,
+.navbar-default .navbar-nav > li > a.states:hover {
+/*
+ * states - hover, focus
+*/
+}
+
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
+ * Copyright 2013-2017 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+
+#sidebar-wrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#sidemenu-wrapper.toggled {
+  visibility: hidden;
+}
+
+#lessonList {
+  overflow-y: scroll;
+  height: 75%;
+}
+
+#page-content-wrapper {
+  width: 100%;
+  position: absolute;
+  padding: 15px;
+}
+
+#page-content-wrapper {
+  position: absolute;
+  margin-right: -197px;
+}
+
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+  position: fixed;
+  top: 0;
+  width: 197px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 100%;
+  background: #f8f8f8;
+  z-index: 2;
+}
+
+.sidebar-nav li {
+  text-indent: 20px;
+  line-height: 40px;
+}
+
+.sidebar-nav li a {
+  display: block;
+  text-decoration: none;
+  color: #333;
+}
+
+.sidebar-nav li a:hover {
+  text-decoration: none;
+  /* color: #269ccb; */
+  color: #42b983;
+  background: rgba(256, 256, 256, 0.2);
+}
+
+.sidebar-nav li a:active, .sidebar-nav li a:focus {
+  text-decoration: none;
+}
+
+.sidebar-nav>.sidebar-brand {
+  margin-top: 50px;
+  height: 65px;
+  font-size: 18px;
+  line-height: 60px;
+}
+
+.sidebar-nav>.sidebar-brand a {
+  color: #000;
+}
+
+@media(min-width:768px) {
+  #sidemenu-wrapper {
+    padding-left: 0;
+    width: 197px;
+  }
+  #sidemenu-wrapper.toggled {
+    visibility: hidden;
+  }
+  #page-content-wrapper {
+    padding: 20px;
+    position: relative;
+  }
+  #page-content-wrapper {
+    position: relative;
+    margin-right: 0;
+  }
+}
+
+/*sidebar editor*/
+
+.edit-move {
+  display: none;
+}
+
+#add-new-course {
+  color: #42b983;
+}
+
+.iottalk-link-block {
+  display: none;
+}
+
+.iottalk-link {
+  /*color:#269ccb !important;*/
+}
+
+.grabbing {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+
+#animation-content {
+  padding-left: 250px;
+}
