@@ -5,6 +5,9 @@ CodeMirror.commands.autocomplete = function(cm) {
     CodeMirror.showHint(cm, CodeMirror.hint.html);
 }
 
+var mac_addr = null;
+var ida= null;
+
 function get_vp_code(cb , lec_id) {
   IDE_ajax_send_data(urls.vp_code, 'GET' , {success_callback: cb});
   return 'ok';
@@ -176,6 +179,15 @@ function reset_code(){
   IDE_ajax_send_data(urls.vp_reset, 'POST', options);
 }
 
+var csrftoken = $('meta[name=csrf-token]').attr('content')
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken)
+        }
+    }
+})
 
 function IDE_ajax_send_data(ajax_url, type, options){
   if (options === undefined)
@@ -201,6 +213,7 @@ function IDE_ajax_send_data(ajax_url, type, options){
     error: function(result) {
       console.log('error: ', ajax_url);
       console.log('result: ', result.status, result.statusText);
+      console.log(result)
     }
   });
 }
