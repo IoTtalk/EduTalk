@@ -55,6 +55,7 @@ Set the informatioin in `./os-EduTalk/edutalk/static/js/rc/main.js`. See `Line 3
 Set the informatioin in `./os-EduTalk/edutalk/static/js/vp-resource/app.js`. See `Line 1`
 `csmapi.set_endpoint('http://domain or IP:9999');`
 
+
 Initialization db
 ----------------------------------------------------------------------
     python ./edutalk/cli.py initdb
