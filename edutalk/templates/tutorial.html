@@ -140,6 +140,7 @@
     輸入秒 (0~59):
     <input type="number" id="end_s" name="s_e" min="0" max="59" value="0"><br>
     <input type="hidden" name="op" value="make_Unixtime">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     <button class="btn" type="submit" class="btn" onclick="closeForm()">
       <a>Download</a>
     </button>
