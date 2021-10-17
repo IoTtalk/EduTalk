@@ -247,6 +247,7 @@ class devicefeature():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting Devicefeature info failed.")
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
