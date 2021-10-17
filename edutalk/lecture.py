@@ -1,6 +1,6 @@
 import logging
 import re
-import os.path
+import os
 import datetime
 import json
 import time
