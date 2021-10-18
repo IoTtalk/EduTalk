@@ -273,7 +273,6 @@ class devicefeature():
 
     def get_or_create(df_name: str, typ, parameter):
         try:
-            print(df_name, typ, "haha")
             return devicefeature.get(df_name)
         except CCMAPIError as e:
             log.exception("Get or create Devicefeature info failed.")
