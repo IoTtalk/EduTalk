@@ -6,7 +6,6 @@ import sys
 from argparse import ArgumentParser
 from contextlib import suppress
 from functools import partial
-from sqlalchemy import exc
 
 import requests
 import yaml
