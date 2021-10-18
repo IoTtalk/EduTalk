@@ -363,7 +363,7 @@ def delete(id_):
 def create_page():
     t_list = [{'name': 'New', 'df_list': []}] + [
         {
-            'name': print(dm),
+            'name': dm,
             'df_list': list(map(
                 lambda x: x.get('df_name'),
                 devicemodel.get(dm)['df_list']))
