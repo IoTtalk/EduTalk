@@ -1,4 +1,14 @@
 Vue.options.delimiters = ['[[', ']]'];
+var csrftoken = $('meta[name=csrf-token]').attr('content')
+
+$.ajaxSetup({
+  beforeSend: function(xhr, settings) {
+      if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
+          xhr.setRequestHeader("X-CSRFToken", csrftoken)
+      }
+  }
+})
+
 var app2 = new Vue({
   el: '#new-card',
   data: function(){
@@ -209,11 +219,11 @@ var app2 = new Vue({
           console.log(err);
           $('#save-new-card-btn').attr('disabled', false);
           let res = err.responseJSON;
-          if (res.type === undefined)
-            return alert(res.reason);
+          // if (res.type === undefined)
+          //   return alert(res.reason);
 
-          self.err.type = res.type;
-          self.err.msg = res.reason;
+          // self.err.type = res.type;
+          // self.err.msg = res.reason;
         }
       })
     },

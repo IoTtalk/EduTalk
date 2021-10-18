@@ -247,6 +247,7 @@ class devicefeature():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting Devicefeature info failed.")
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -272,6 +273,7 @@ class devicefeature():
 
     def get_or_create(df_name: str, typ, parameter):
         try:
+            print(df_name, typ, "haha")
             return devicefeature.get(df_name)
         except CCMAPIError as e:
             log.exception("Get or create Devicefeature info failed.")
@@ -384,7 +386,7 @@ class devicemodel():
             return response['result']
         except CCMAPIError:
             log.exception("Getting DeviceModel info failed.")
-            return response
+            return status
         except Exception as err:
             log.exception(err)
 
@@ -396,6 +398,7 @@ class devicemodel():
         
         try:
             status, response = utils.ag_post(_json(api_name, payload))
+            # print("response: ", response)
             if not status:
                 raise CCMAPIError
         except CCMAPIError:

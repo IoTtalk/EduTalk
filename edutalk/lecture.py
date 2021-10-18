@@ -1,6 +1,7 @@
 import logging
 import re
 import os.path
+import os
 import datetime
 import json
 import time
@@ -8,7 +9,7 @@ import time
 from itertools import chain
 
 from elasticsearch import Elasticsearch
-from flask import Flask, Response, send_file
+from flask import Flask, Response, send_file, send_from_directory
 from flask import Blueprint, render_template, session, abort, jsonify, request
 from flask import render_template_string
 from flask import redirect, url_for
@@ -134,8 +135,9 @@ def download_data():
 #    worksheet_write(ws,timestamp,sample,convert_time,count)
     if export_sheet == 1:
         wb.remove(wb['Sheet'])
-    wb.save('../data/'+filename+'.xlsx')
-    return send_file(os.path.join("/data", filename+'.xlsx'),
+    wb.save("./docs/"+filename+'.xlsx')
+    return send_from_directory(os.getcwd()+"/docs", 
+                     filename=filename+'.xlsx',
                      mimetype='text/csv',
                      attachment_filename=start_string+'&&'+stop_string+''+filename+'.xlsx',
                      as_attachment=True)
@@ -361,7 +363,7 @@ def delete(id_):
 def create_page():
     t_list = [{'name': 'New', 'df_list': []}] + [
         {
-            'name': dm,
+            'name': print(dm),
             'df_list': list(map(
                 lambda x: x.get('df_name'),
                 devicemodel.get(dm)['df_list']))
@@ -406,13 +408,11 @@ def create():
     for f in ('name', 'odm', 'idm', 'joins', 'code'):
         if f not in request.json:
             return json_err('field `{}` is required'.format(f)), 400
-
     name = request.json['name']
     if not name:
         return json_err('Lecture name is required', type='lecture'), 400
     elif Lecture.isexist(name):
         return json_err('duplicated lecture name', type='lecture'), 400
-
     url = request.json.get('url', '')
 
     # checking all fields first, then invoke ccmapi to ``create`` stuff
@@ -423,7 +423,6 @@ def create():
         if 'dfs' not in x:
             msg = 'device feature list is for {} is required'.format(dm)
             return json_err(msg, type='df'), 400
-
     # check min, max is not empty if this field exists
     idfs = request.json['idm']['dfs']
     for df_info in idfs:
@@ -441,27 +440,29 @@ def create():
                 msg = 'default value should be between min and max'
                 return json_err(msg, type='df_parameter'), 400
 
-
     # check odm_name is eng+number only
     odm_name = request.json['odm']['name']
     if re.match('[a-zA-Z_][a-zA-Z0-9_]*', odm_name) is None:
         return json_err('Invalid program name, english alphabet or number only', type='dm'), 400
     # check odm is non-exists
     try:
-        devicemodel.get(odm_name)
+        status = devicemodel.get(odm_name) #fixd bugs
+        if not status:
+            raise CCMAPIError
         return json_err('Program name already used by other lecture', type='dm'), 400
     except CCMAPIError as e:
         ...
-
     # create df of dm
     for dm, typ in (('odm', 'output'), ('idm', 'input')):
         x = request.json.get(dm)
         if not x['dfs']:
             return json_err('Feature list cannot be empty', type='df'), 400
         for df in x['dfs']:
-            devicefeature.get_or_create(re.sub(r'_', r'-', df['name']), type=typ, parameter=[{
-                    'param_type': 'float', 'min': 0, 'max': 10,
-                }])
+            devicefeature.get_or_create(re.sub(r'_', r'-', df['name']), 
+                                        typ, 
+                                        [{'param_type': 'float', 'min': 0, 'max': 10,}]
+            )
+
 
 
     # create dm

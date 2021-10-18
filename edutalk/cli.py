@@ -6,6 +6,7 @@ import sys
 from argparse import ArgumentParser
 from contextlib import suppress
 from functools import partial
+from sqlalchemy import exc
 
 import requests
 import yaml
@@ -40,6 +41,7 @@ def load_fixtures(fname):
                 load_ccm_fixture(db, x)
 
         db.session.commit()
+        
 
 
 def load_model(db, x):

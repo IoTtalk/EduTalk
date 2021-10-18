@@ -42,7 +42,7 @@
     - dm: New
       code_path: ./src/New-template.py
 
-    - dm: Template_BallFreeFall
+    - dm: BallFreeFall
       code_path: ./src/BallFreeFall-template.py
 
     # TODO: fix BallSpin template source
