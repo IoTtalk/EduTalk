@@ -385,7 +385,7 @@ class devicemodel():
             return response['result']
         except CCMAPIError:
             log.exception("Getting DeviceModel info failed.")
-            return response
+            return status
         except Exception as err:
             log.exception(err)
 
@@ -397,6 +397,7 @@ class devicemodel():
         
         try:
             status, response = utils.ag_post(_json(api_name, payload))
+            # print("response: ", response)
             if not status:
                 raise CCMAPIError
         except CCMAPIError:

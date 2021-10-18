@@ -40,6 +40,7 @@ def load_fixtures(fname):
                 load_ccm_fixture(db, x)
 
         db.session.commit()
+        
 
 
 def load_model(db, x):
