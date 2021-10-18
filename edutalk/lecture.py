@@ -136,8 +136,7 @@ def download_data():
     if export_sheet == 1:
         wb.remove(wb['Sheet'])
     wb.save("./docs/"+filename+'.xlsx')
-    return send_from_directory(os.getcwd()+"/docs", 
-                     filename=filename+'.xlsx',
+    return send_file(os.path.join(os.getcwd()+"/docs", filename+'.xlsx'),
                      mimetype='text/csv',
                      attachment_filename=start_string+'&&'+stop_string+''+filename+'.xlsx',
                      as_attachment=True)
