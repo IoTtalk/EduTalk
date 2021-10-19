@@ -1,4 +1,4 @@
-csmapi.set_endpoint('http://edu.scratchtalk.tw:9999');
+csmapi.set_endpoint(urls.csm_url);
 
 var csrftoken = $('meta[name=csrf-token]').attr('content')
 

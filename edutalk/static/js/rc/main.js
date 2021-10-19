@@ -30,7 +30,7 @@ $(function () {
         if (data) {return data;}\
       }")();
   });
-  csmapi.set_endpoint('http://edu.scratchtalk.tw:9999');
+  csmapi.set_endpoint(urls.csm_url);
 
   var profile = {
       'dm_name': dm_name,          
@@ -69,7 +69,7 @@ $(function () {
   var ida = {
     'ida_init': ida_init,
   }; 
-
+  
   dai(profile, mac_addr, ida)
 
 //   const da = new iottalkjs.DAI({
