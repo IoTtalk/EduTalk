@@ -31,8 +31,9 @@ Setup IoTtalk and Autogen endpoint. `./edutalk/config.py`
 
 ```py
 #See  line 41
-__ccm_api = 'http://localhost:7788/api/v0' #change to the port you use
-__csm_api = 'http://localhost:9999' #change to the port you use
+__ccm_api = 'http://domain or IP:7788/api/v0' #change to the port you use
+__csm_api = 'http://domain or IP:9999' #change to the port you use
+
 
 # line 52
 ag_url = 'http://localhost:8080' #change to the port you use
