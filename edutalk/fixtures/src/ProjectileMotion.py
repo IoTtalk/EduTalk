@@ -56,7 +56,7 @@ def setup():
     profile = {
         'dm_name': 'ProjectileMotion',
         'idf_list': [],
-        'odf_list' : ['Speed', 'Angle'],
+        'odf_list' : [Speed, Angle],
     }
     dai(profile, mac_addr, ida)
 

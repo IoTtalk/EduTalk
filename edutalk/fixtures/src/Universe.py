@@ -16,7 +16,7 @@ def setup():
     profile = {
         'dm_name' : 'Universe',
         'idf_list': [],
-        'odf_list' : ['Gravity', 'Speed'],
+        'odf_list' : [Gravity, Speed],
     }
     dai(profile, mac_addr, ida)
 

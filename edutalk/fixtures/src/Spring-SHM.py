@@ -133,7 +133,7 @@ def setup():
     axisInit()
     profile = {
         'dm_name': 'Spring-SHM',
-        'odf_list': ['SpringConstant', 'Mass']
+        'odf_list': [SpringConstant, Mass]
     }
     dai(profile, mac_addr, ida)
 

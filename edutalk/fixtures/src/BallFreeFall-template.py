@@ -1,13 +1,13 @@
-{%- if ['Gravity',''] not in odf_list-%}
+{%- if 'Gravity' not in odf_list-%}
 gravity = 5
 {{ "\n" }}
 {%- endif -%}
-{%- if ['Radius',''] not in odf_list-%}
+{%- if 'Radius' not in odf_list-%}
 radius = 5
 {{ "\n" }}
 {%- endif -%}
 
-{%-for df_name, _ in odf_list -%}
+{%-for df_name in odf_list -%}
     {%- if "_O" in df_name -%}
         {%- set sm_df = df_name -%}
         {%- set df_name = df_name[:-2].lower() -%}
@@ -89,7 +89,7 @@ while True:
     {% set label_text = {'cont':''} %}
     {%- set value_list = [] -%}
     {%- for default_df in ['Gravity', 'Radius']-%}
-        {%- if [default_df,''] not in odf_list-%}
+        {%- if default_df not in odf_list-%}
             {%- set tmp = default_df.lower() + ': {:.2f}\\n'-%}
             {%- if label_text.update({'cont':label_text.cont+ tmp }) -%}
             {%- endif -%}
@@ -98,7 +98,7 @@ while True:
         {%- endif -%}
     {%- endfor -%}
 
-    {%- for df_name, _ in odf_list -%}
+    {%- for df_name in odf_list -%}
         {%- if "_O" in df_name -%}
             {%- set df_name = df_name[:-2].lower() -%}
             {%- if df_name == "humidity" or df_name == "uv" or df_name == "alcohol" -%}

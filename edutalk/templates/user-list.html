@@ -66,6 +66,7 @@
       $.ajax({
         url: '{{ url_for("account.index") }}' + u_id,
         type: 'DELETE',
+        headers: {'x-csrf-token': "{{ csrf_token() }}"},
         data: {u_id: u_id},
         success: function() {
           target_element.remove();

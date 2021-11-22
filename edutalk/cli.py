@@ -60,6 +60,13 @@ def _get_or_create(r: 'record', f: 'function'):
         res = f.get(r['name'])
         if "state" in res and res['state'] == 'error':
             raise CCMAPIError
+        elif f == ccmapiv0.devicefeature:
+            f.update(df_id=res['df_id'], 
+                     df_name=r['name'],
+                     df_type=r['type'],
+                     parameter=r['parameter'],
+                     comment=res['comment'],
+                     df_category=res['df_category'])
     except CCMAPIError as e:
         # FIXME: maybe delete before create?
         f.create(**r)
