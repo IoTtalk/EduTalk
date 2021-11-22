@@ -33,7 +33,6 @@ var dan = (function () {
 
     function register (endpoint, profile, callback) {
         //profile['d_name'] = (Math.floor(Math.random() * 99)).toString() + '.' + profile['dm_name'];
-                 
         _profile = profile;
         csmapi.set_endpoint(endpoint);
 
@@ -71,6 +70,7 @@ var dan = (function () {
                 }
             }
         }
+
         csmapi.register(_mac_addr, profile, register_callback);
     }
 

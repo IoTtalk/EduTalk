@@ -1,8 +1,8 @@
 
-df = 'Speed'
+df = ['Speed']
 profile = {
     'dm_name': 'Ball-throw2',
-    'odf_list': [df]
+    'odf_list': {{ df | todf_list | safe }},
 }
 
 dai(profile, mac_addr, ida)

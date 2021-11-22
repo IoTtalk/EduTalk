@@ -49,7 +49,7 @@ def oauth2_callback():
 
         # Redirect user-agent to the authorization endpoint if a user is not authenticated
         return oauth2_client.iottalk.authorize_redirect(redirect_uri)
-
+    
     try:
         # Exchange access token with an authorization code with token endpoint
         #

@@ -1,11 +1,10 @@
 const dai = function (profile, mac_addr, ida) {
     var odf_func = {};
 	var idf_func = {};
-
     if (profile.is_sim == undefined)   profile.is_sim = false;
     if (profile.idf_list == undefined) profile.idf_list = [];
     if (profile.odf_list == undefined) profile.odf_list = [];	
-    
+
     profile['df_list']=[];
     for (var i = 0; i < profile.odf_list.length; i++) {
         odf_name = profile.odf_list[i].name;
@@ -15,7 +14,6 @@ const dai = function (profile, mac_addr, ida) {
         odf_func[odf_name] = profile.odf_list[i];
 		profile.odf_list[i] = odf_name;
 		profile['df_list'].push(odf_name);
-        console.log(odf_name);
     }
 	
     for (var i = 0; i < profile.idf_list.length; i++) {
@@ -26,8 +24,7 @@ const dai = function (profile, mac_addr, ida) {
         // idf_func[idf_name] = profile.idf_list[i];
 		// profile.idf_list[i] = idf_name;
 		profile['df_list'].push(idf_name);
-        console.log(idf_name);
-    }	
+    }
 	
     function _push(idf_name) {
 	    // data = idf_func[idf_name]();

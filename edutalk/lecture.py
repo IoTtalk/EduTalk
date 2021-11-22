@@ -5,6 +5,7 @@ import os
 import datetime
 import json
 import time
+import requests
 
 from itertools import chain
 
@@ -16,7 +17,7 @@ from flask import redirect, url_for
 from flask_login import current_user
 
 from edutalk.config import config
-from edutalk.models import Lecture, Template, LectureProject, get_pre_pid, set_pid, get_project_info
+from edutalk.models import Lecture, Template, LectureProject, MacAddress, get_pre_pid, set_pid, get_project_info
 from edutalk.utils import login_required, teacher_required, json_err
 
 from edutalk.exceptions import CCMAPIError
@@ -28,6 +29,8 @@ from openpyxl import Workbook
 app = Blueprint('lecture', __name__)
 db = config.db
 log = logging.getLogger('edutalk.lecture')
+
+csm_url = config.csm_url()
 
 @app.route('/<int:id_>/bind',methods=['GET'], strict_slashes=False)
 @login_required
@@ -57,8 +60,6 @@ def bind(id_):
 @app.route('/<int:id_>/unbind',methods=['GET'], strict_slashes=False) 
 @login_required
 def unbind(id_):
-    print(current_user)
-    print(id_)
     lecture_id = str(id_)+'abc'
     lecture = Lecture.query.get(id_)
     x = LectureProject.get_by_lec_user(lecture, current_user)
@@ -253,7 +254,7 @@ def detail(id_):
 @app.route('/', methods=['GET'], strict_slashes=False)
 @login_required
 def index():  # place holder for ``url_for``
-    ...
+    abort(403)
 
 
 @app.route('/<int:id_>/rename', methods=['POST'], strict_slashes=False)
@@ -330,13 +331,34 @@ def reorder():
 @login_required
 @teacher_required
 def delete(id_):
+    try:
+        #unbind first
+        lecture = Lecture.query.get(id_)
+        x = LectureProject.get_by_lec_user(lecture, current_user)
+        do_id = x.ido['do']['do_id']
+        response = device.unbind(x.p_id, do_id)
+    except:
+        pass
+    
+    #get macaddress from db
+    mac_addrs = [value for value, in db.session.query(MacAddress.macaddress).filter_by(lec_id=id_).all()]
+    #deregister all macaddress in db
+    for mac_addr in mac_addrs:
+        headers = {'Content-type': 'application/json'}
+        r = requests.delete(csm_url+"/"+mac_addr, headers=headers)
+        if r.status_code==200 or r.status_code==400:
+            #remove macaddress from db
+            MacAddress.query.filter_by(macaddress=mac_addr).delete()
+        else:
+            log.error('Deregister mac_address failed, please check your IoTtalk/csm.py')
+    db.session.commit()
+    
     l = Lecture.query.get(id_)
     if l is None:
         return json_err('Lecture {} not found'.format(id_)), 404
 
     for x in l.lecture_projects:
         x.delete()
-
 
     # delete input/output device model
 
@@ -446,8 +468,9 @@ def create():
         return json_err('Invalid program name, english alphabet or number only', type='dm'), 400
     # check odm is non-exists
     try:
-        status = devicemodel.get(odm_name) #fixd bugs
-        if not status:
+        res = devicemodel.get(odm_name)
+        # res = project.get(odm_name or p_id)
+        if "state" in res and res['state'] == 'error':
             raise CCMAPIError
         return json_err('Program name already used by other lecture', type='dm'), 400
     except CCMAPIError as e:
@@ -458,12 +481,10 @@ def create():
         if not x['dfs']:
             return json_err('Feature list cannot be empty', type='df'), 400
         for df in x['dfs']:
-            devicefeature.get_or_create(re.sub(r'_', r'-', df['name']), 
-                                        typ, 
-                                        [{'param_type': 'float', 'min': 0, 'max': 10,}]
+            devicefeature.get_or_create(df_name=re.sub(r'_', r'-', df['name']), 
+                                        typ=typ, 
+                                        parameter=[{'param_type': 'float', 'min': 0, 'max': 0,}]
             )
-
-
 
     # create dm
     for dm in ('idm', 'odm'):
@@ -479,9 +500,8 @@ def create():
 
     odm = request.json['odm']
     sensor_odfs = ['Acceleration_O', 'Gyroscope_O', 'Orientation_O'] 
-    odfs = list(map(lambda x: [x['name'], ['', '', '']] if x['name'] in sensor_odfs else [x['name'],['']], odm['dfs']))
+    odfs = list(map(lambda x: x['name'] if x['name'] in sensor_odfs else x['name'], odm['dfs']))
     sm_odfs = [x['name'] for x in odm['dfs'] if re.search('_O$', x['name'])]
-
     df_default_values = {odm['dfs'][idx]['name']: x['default'] if 'default' in x else 0 for idx, x in enumerate(request.json['idm']['dfs'])}
     odm_temp = request.json['code']
     temp = Template.query.filter_by(dm=odm_temp).first()
@@ -507,4 +527,4 @@ def create():
 
 @app.app_template_filter()
 def todf_list(x):
-    return '[{}]'.format(', '.join('[{}, {}]'.format(a[0], repr(a[1])) for a in x))
+    return '[{}]'.format(', '.join('{}'.format(a) for a in x))

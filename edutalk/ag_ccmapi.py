@@ -33,6 +33,8 @@ class device():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting Device info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -51,6 +53,8 @@ class device():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Bind Device failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -66,7 +70,9 @@ class device():
             if not status:
                 raise CCMAPIError 
         except CCMAPIError:
-            log.exception("Bind Device failed.")
+            log.exception("Unbind Device failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -96,6 +102,8 @@ class project():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting Project info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -111,6 +119,8 @@ class project():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create Project failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -126,6 +136,8 @@ class project():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Delete Project failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -141,6 +153,8 @@ class project():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Turn on Project failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -156,6 +170,8 @@ class project():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Turn off Project failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -184,6 +200,8 @@ class deviceobject():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting Deviceobject info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -204,6 +222,8 @@ class deviceobject():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create Deviceobject failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -220,6 +240,8 @@ class deviceobject():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create Deviceobject failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -247,6 +269,7 @@ class devicefeature():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting Devicefeature info failed.")
+            print(response)
             return response
         except Exception as err:
             log.exception(err)
@@ -267,25 +290,34 @@ class devicefeature():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create Devicefeature info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
 
     def get_or_create(df_name: str, typ, parameter):
         try:
-            return devicefeature.get(df_name)
+            res = devicefeature.get(df_name)
+            if "state" in res and res['state'] == 'error':
+                raise CCMAPIError
         except CCMAPIError as e:
             log.exception("Get or create Devicefeature info failed.")
+            return devicefeature.create(name=df_name,
+                                        type=typ,
+                                        parameter=parameter)
         print("Did not get")
-        return devicefeature.get(devicefeature.create(df_name, typ, parameter))
+        return
 
 
-    def update(df_id, df_name, df_type, parameter, api_name='devicefeature.update'):
+    def update(df_id, df_name, df_type, parameter, comment, df_category, api_name='devicefeature.update'):
         payload = {
             "df_id": df_id,
             "df_name": df_name,
             "df_type": df_type,
-            "parameter": parameter
+            "parameter": parameter,
+            "comment": comment,
+            "category": df_category
         }
         
         try:
@@ -294,9 +326,11 @@ class devicefeature():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Update Devicefeature info failed.")
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
+
 
 
 
@@ -323,6 +357,8 @@ class networkapplication():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting NetworkApplication info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -339,6 +375,8 @@ class networkapplication():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create NetworkApplication info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -354,7 +392,9 @@ class networkapplication():
             if not status:
                 raise CCMAPIError   
         except CCMAPIError:
-            log.exception("Deley NetworkApplication info failed.")
+            log.exception("Delete NetworkApplication info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -385,7 +425,7 @@ class devicemodel():
             return response['result']
         except CCMAPIError:
             log.exception("Getting DeviceModel info failed.")
-            return status
+            return response
         except Exception as err:
             log.exception(err)
 
@@ -397,11 +437,12 @@ class devicemodel():
         
         try:
             status, response = utils.ag_post(_json(api_name, payload))
-            # print("response: ", response)
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create DeviceModel info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -417,13 +458,15 @@ class devicemodel():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Delete DeviceModel info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
 
     def update(dm_id, dm_name, dfs, api_name='devicemodel.update'):
         payload = {
-            "dn_id": dm_id,
+            "dm_id": dm_id,
             "dm_name": dm_name,
             "dfs": dfs
         }
@@ -434,6 +477,8 @@ class devicemodel():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create DeviceModel info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']

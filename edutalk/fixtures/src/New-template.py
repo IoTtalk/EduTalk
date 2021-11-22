@@ -1,4 +1,4 @@
-{%-for df_name, _ in odf_list -%}
+{%-for df_name in odf_list -%}
     {%- if "_O" in df_name -%}
         {%- set sm_df = df_name -%}
         {%- set df_name = df_name[:-2].lower() -%}
@@ -53,7 +53,7 @@ def setup():
 setup()
 
 {{ "\n" }}
-# {{ odf_list | todf_list | safe }} 讀取感測器後會自動更新
+# {{ odf_list | todf_list | safe }} 讀取感測器後會自動更新 
 # 請勿修改上方程式碼
 
 freq = 120        # 更新頻率(Hz)
@@ -69,7 +69,7 @@ def update_info():
     global label_info
     {% set label_text = {'cont':''} %}
     {%- set value_list = [] -%}
-    {%- for df_name, _ in odf_list -%}
+    {%- for df_name in odf_list -%}
         {%- if "_O" in df_name -%}
             {%- set df_name = df_name[:-2].lower() -%}
             {%- if df_name == "humidity" or df_name == "uv" or df_name == "alcohol" -%}

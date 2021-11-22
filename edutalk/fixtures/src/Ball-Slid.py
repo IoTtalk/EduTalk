@@ -205,7 +205,7 @@ def setup():
     sliding_init()
     profile = {
         'dm_name': 'Ball-Slid',
-        'odf_list' : ['Angle', 'Speed', 'Gravity', 'Friction'],
+        'odf_list' : [Angle, Speed, Gravity, Friction],
     }
     dai(profile, mac_addr, ida)
 

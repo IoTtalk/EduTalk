@@ -32,7 +32,7 @@
       url: https://hackmd.io/s/HJIMo2uem
       idm: ProjectileMotionRC
       odm: ProjectileMotion
-      joins: [[RangeSlider1, Speed, 25], [RangeSlider2, Angle, 0]]
+      joins: [[RangeSlider3, Speed, 25], [RangeSlider2, Angle, 0]]
       code_path: ./src/ProjectileMotion.py
 
 # WARNING: Template dm name should add a prefix "Template_"
@@ -79,7 +79,7 @@
       type: input
       parameter: 
         - min: 0.0
-          max: 10.0
+          max: 30.0
           param_type: float
 
     - name: RangeSlider4
@@ -100,8 +100,28 @@
       type: output
       parameter:
         - min: 0.0
-          max: 10.0
+          max: 0.0
           param_type: float
+    
+    - name: Gravity
+      type: output
+      parameter:
+        - min: 0.0
+          max: 0.0
+          param_type: float
+
+    - name: Angle
+      type: output
+      parameter:
+        - min: 0.0
+          max: 0.0
+          param_type: float
+    
+    - name: Speed
+      type: output
+      parameter:
+        - param_type: float
+        - param_type: string
 
     - name: Acceleration-I
       type: input
@@ -276,17 +296,17 @@
         - key: Speed
           parameter:
             - min: 0
-              max: 100
+              max: 0
               param_type: float
         - key: Angle
           parameter:
             - min: 0
-              max: 90
+              max: 0
               param_type: float
 
     - name: ProjectileMotionRC
       dfs:
-        - key: RangeSlider1
+        - key: RangeSlider3
         - key: RangeSlider2
 
     - name: BallFreeFall
@@ -294,12 +314,14 @@
         - key: Gravity
           parameter:
             - min: 0
-              max: 10
+              # max: 10
+              max: 0
               param_type: float
         - key: Radius
           parameter:
             - min: 0
-              max: 10
+              # max: 10
+              max: 0 #min max都改成0，rc才能正常接收data
               param_type: float
 
     - name: BallFreeFallRC
@@ -312,12 +334,14 @@
         - key: Speed
           parameter:
             - min: 0
-              max: 10
+              # max: 10
+              max: 0.0
               param_type: float
         - key: Gravity
           parameter:
             - min: 0
-              max: 10
+              # max: 10
+              max: 0.0
               param_type: float
 
     - name: UniverseRC

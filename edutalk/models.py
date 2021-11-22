@@ -192,6 +192,8 @@ class LectureProject(db.Model, DictMixin):
     lec_id = Column(Integer, ForeignKey('Lecture.id'), nullable=False)
     p_id = Column(Integer, nullable=False)  # iottalk project id
     code = Column(String)  # the vpython program
+    macaddress = db.relationship('MacAddress', cascade='all,delete',
+                                       backref='lectureproject')
     # ``user`` is avialable via backref
     # ``lecture`` is avialable via backref
 
@@ -288,3 +290,16 @@ class AccessToken(db.Model, TimestampMixin):
 
     user = db.relationship('User', back_populates='access_tokens')
     refresh_token = db.relationship('RefreshToken', back_populates='access_tokens')
+
+
+class MacAddress(db.Model, DictMixin):
+    __tablename__ = 'MacAddress'
+    id = Column(Integer, primary_key=True, nullable=False)
+    lec_id = Column(Integer, ForeignKey('LectureProject.lec_id'), nullable=False)
+    macaddress = Column(String)
+
+    @classmethod
+    def create(cls, lec_id, mac_addr):
+        x = cls(lec_id=lec_id, macaddress=mac_addr)
+        db.session.add(x)
+        db.session.commit()

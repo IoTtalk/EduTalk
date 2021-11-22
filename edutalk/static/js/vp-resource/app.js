@@ -22,7 +22,6 @@ var mac_addr = (function () {
 
 function ida_init(){
   let url = urls.vp_bind(mac_addr);
-  
   $.ajax({
     url: url,
     type: 'POST',
@@ -79,7 +78,7 @@ var execute = function (code) {
     runprog(js_code);
   } catch (err) {
     // compile error
-    console.log(err);
+    console.log("glowscript_compile error: "+err);
   }
 
 };
@@ -87,7 +86,7 @@ var execute = function (code) {
 var fetch_code = function (url) {
   $.getJSON(url)
     .done(function (data) {
-      console.log(data)
+      // console.log(data)
       execute(data.code)
     })
     .fail(function (jqxhr, settings, execption) {
