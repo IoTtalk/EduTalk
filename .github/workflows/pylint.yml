@@ -30,6 +30,6 @@ jobs:
       uses: alexanderdamiani/pylinter@v1.3.0
       with:
         python-root: './edutalk/'
-        flake8-flags: '--count --show-source --statistics --ignore=E501 --exclude=./edutalk/fixtures/src/'
+        flake8-flags: '--count --show-source --statistics --ignore=E501 --exclude=./edutalk/fixtures/src/,./edutalk/static'
         mypy-flags: '--ignore-missing-imports'
         fail-on-isort: true
