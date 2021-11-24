@@ -1,0 +1,29 @@
+name: Python package
+
+on:
+  push:
+    branches: [ master , bugs_fix ]
+  pull_request:
+    branches: [ master, bugs_fix ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.6"]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        pip install -e .
+        python -m pip install flake8
+    - name: Test code with flake8
+      run: |
+        flake8 --statistics --show-source /edutalk/
