@@ -1,21 +1,17 @@
-import json
 import logging
 import re
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from uuid import uuid4
 
-import requests
 import pytz
 
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy import Integer, Text, Boolean, String, Enum, DateTime, JSON
+from sqlalchemy import Integer, Text, Boolean, String, DateTime, JSON
 from sqlalchemy import asc
 from flask_login import UserMixin
-from sqlalchemy.schema import DefaultClause
 
-from edutalk.ag_ccmapi import project, deviceobject, devicefeature, networkapplication as na
+from edutalk.ag_ccmapi import project, deviceobject, networkapplication as na
 from edutalk.exceptions import CCMAPIError
 
 from edutalk.config import config
@@ -24,15 +20,20 @@ db = config.db
 log = logging.getLogger('edutalk.models')
 
 pid_list = [0]
-def get_project_info(pid,user):
+
+
+def get_project_info(pid, user):
     return project.get(pid)['odo'][1]['do_id']
+
 
 def set_pid(pid):
     pid_list.append(pid)
     return 200
 
+
 def get_pre_pid():
     return pid_list[-1]
+
 
 class DictMixin:
     def to_dict(self, fields=None):
@@ -193,7 +194,7 @@ class LectureProject(db.Model, DictMixin):
     p_id = Column(Integer, nullable=False)  # iottalk project id
     code = Column(String)  # the vpython program
     macaddress = db.relationship('MacAddress', cascade='all,delete',
-                                       backref='lectureproject')
+                                 backref='lectureproject')
     # ``user`` is avialable via backref
     # ``lecture`` is avialable via backref
 
@@ -232,7 +233,6 @@ class LectureProject(db.Model, DictMixin):
             #     na_id = na.create(self.p_id, [(ido_id, idf), (odo_id, odf)])
             na_id = na.create(self.p_id, [(ido_id, idf), (odo_id, odf)])
 
-
     # def get_logger_df_name(df_id_list, idf):
     #     if idf=="Acceleration-I" or idf=="Gyroscope-I" or idf=="Orientation-I" or idf=="Magnetometer-I" or idf=="Humidity-I" or idf=="UV-I" or idf=="Alcohol-I":
     #         logger_odf = idf[:-1]+"logger"
@@ -258,7 +258,7 @@ class LectureProject(db.Model, DictMixin):
     def delete(self):
         try:
             project.delete(self.p_id)
-        except CCMAPIError as e:
+        except CCMAPIError:
             log.warning('user %s project %s delete failed',
                         self.user.username, self.p_id)
         db.session.delete(self)

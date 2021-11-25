@@ -1,14 +1,16 @@
-import requests
 import json
 import logging
-from functools import wraps
 
-from flask import session, request, redirect, url_for, abort, jsonify, flash
+import requests
+
+from functools import wraps
+from flask import redirect, url_for, abort, jsonify, flash
 from flask_login import current_user
 
 from edutalk.config import config
 
 log = logging.getLogger('edutalk.utils')
+
 
 def login_required(f):
     '''
@@ -21,7 +23,7 @@ def login_required(f):
     def wrapper(*args, **kwargs):
         if not current_user.is_authenticated:
             return redirect(url_for('account.auth_redirect_endpoint'))
-            
+
         if not current_user.approved:
             flash('Please wait for administrator\'s approval', 'error')
             return redirect(url_for('index'))
@@ -72,7 +74,7 @@ def ag_post(data):
     try:
         response = json.loads(
             requests.post(
-                config.ag_url+'/ccm_api/',
+                config.ag_url + '/ccm_api/',
                 json=data
             ).text
         )

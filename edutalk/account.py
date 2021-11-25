@@ -1,23 +1,23 @@
-import os
+import datetime
+import logging
+
+import pytz
 
 from flask import Blueprint, render_template, request, redirect, session
 from flask import url_for, jsonify, abort
+from flask_login import current_user, login_user, logout_user
+from authlib.integrations.requests_client import OAuth2Session
+from requests import exceptions as requests_exceptions
 
 from edutalk.config import config
-from edutalk.models import Lecture, User, Group, AccessToken, RefreshToken, User
+from edutalk.models import User, Group, AccessToken, RefreshToken
 from edutalk.utils import login_required, teacher_required
 from edutalk.oauth2_client import oauth2_client
-
-import datetime
-import logging
-import pytz
-from authlib.integrations.requests_client import OAuth2Session
-from flask_login import current_user, login_user, logout_user
-from requests import exceptions as requests_exceptions
 
 app = Blueprint('account', __name__)
 db = config.db
 log = logging.getLogger('edutalk.account')
+
 
 @app.route('/', strict_slashes=False)
 def index():
@@ -49,7 +49,7 @@ def oauth2_callback():
 
         # Redirect user-agent to the authorization endpoint if a user is not authenticated
         return oauth2_client.iottalk.authorize_redirect(redirect_uri)
-    
+
     try:
         # Exchange access token with an authorization code with token endpoint
         #
@@ -67,7 +67,7 @@ def oauth2_callback():
 
         if not user_record:
             # Create a new user record if there does not exist an old one
-            if Group.default().id == 1: # is admin, approved as default
+            if Group.default().id == 1:  # is admin, approved as default
                 approved = True
             else:
                 approved = False
@@ -77,7 +77,7 @@ def oauth2_callback():
                 username=user_info.get('preferred_username'),
                 email=user_info.get('email'),
                 group=Group.default(),
-                approved = approved
+                approved=approved
             )
             db.session.add(user_record)
 
