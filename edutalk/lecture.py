@@ -34,25 +34,7 @@ csm_url = config.csm_url()
 @app.route('/<int:id_>/bind', methods=['GET'], strict_slashes=False)
 @login_required
 def bind(id_):
-    # print(current_user)
-    # print(id_)
-    # lecture_id = str(id_) + 'abc'
-    # lecture = Lecture.query.get(id_)
-    # x = LectureProject.get_by_lec_user(lecture, current_user)
-    # pid = x.p_id
-    # pre_pid = get_pre_pid()
-    # re = set_pid(pid)
-    # if pre_pid != 0:
-    #     pre_logger_odo_id = get_project_info(pre_pid,current_user)
-    #     device.unbind(pre_pid,pre_logger_odo_id)
-    # logger_odo_id = get_project_info(pid,current_user)
-#     logger_d_id = get_logger_info(pid,'d_id')
-#     logger_d_id = get_logger_device_id(pid)
-    # d_id_info = device.get(pid,logger_odo_id)
-    # logger_d_id = d_id_info[0]['d_id']
-    # device.bind(pid,logger_odo_id,logger_d_id)
-    # print("testbind end")
-    # return lecture_id + str(pid) + 'abc' + str(logger_odo_id) + 'abc' + str(logger_d_id) + 'pre_pid=' + str(pre_pid)
+    # TODO: logger or something
     pass
     return "ok"
 
@@ -60,18 +42,8 @@ def bind(id_):
 @app.route('/<int:id_>/unbind', methods=['GET'], strict_slashes=False)
 @login_required
 def unbind(id_):
-    print(current_user)
-    print(id_)
-    # lecture_id = str(id_) + 'abc'
-    # lecture = Lecture.query.get(id_)
-    # x = LectureProject.get_by_lec_user(lecture, current_user)
-    # pid = x.p_id
-    # logger_odo_id = get_project_info(pid, current_user)
-#    logger_d_id = get_logger_info(pid, 'd_id')
-#    logger_d_id = get_logger_device_id(pid)
-    # device.unbind(pid, logger_odo_id)
-    # print("testunbind end")
-    # return lecture_id + str(pid) + 'abc' + str(logger_odo_id) + 'abc'
+    # TODO: logger or something
+    pass
     return "ok"
 
 
@@ -122,20 +94,20 @@ def download_data():
             query_es(value, start_unixtime, stop_unixtime, ws)
             export_sheet = 1
     print("out of checkbox")
-#    timestamp=start_time
-#    filename="OCT"+timestamp
+#    timestamp = start_time
+#    filename = "OCT" + timestamp
 #    wb = Workbook()
 #    ws = wb.active
 #    worksheet_init(ws)
-#    sheet= wb['Sheet']
-#    timestamp=str(create_time.minute)+""+str(create_time.second)
-#    sample=[12,13,14]
+#    sheet = wb['Sheet']
+#    timestamp = str(create_time.minute) + "" + str(create_time.second)
+#    sample = [12,13,14]
 #    convert_time = 10
-#    count=0
+#    count = 0
 #    ws = wb.create_sheet("Gyr")
 #    worksheet_init(ws)
-#    worksheet_write(ws,start_unixtime,sample,convert_time,count)
-#    worksheet_write(ws,timestamp,sample,convert_time,count)
+#    worksheet_write(ws, start_unixtime, sample, convert_time, count)
+#    worksheet_write(ws, timestamp, sample, convert_time, count)
     if export_sheet == 1:
         wb.remove(wb['Sheet'])
     wb.save("./docs/" + filename + '.xlsx')
@@ -150,8 +122,8 @@ def query_es(df, time_start, time_stop, ws):
     ip = get('https://api.ipify.org').text
     es = Elasticsearch(hosts=ip)  # "210.61.119.117"
 #    df = "Acclogger"
-#    time_start ="1568623579962"
-#    time_stop ="1568623580010"
+#    time_start = "1568623579962"
+#    time_stop = "1568623580010"
 #    df = args.deviceFeature
 #    time_start = args.timestart
 #    time_stop = args.timestop
@@ -180,7 +152,7 @@ def query_es(df, time_start, time_stop, ws):
 
 
 def time_to_unixtime(date, hour, minute, second):
-    # unixtime = int(time.mktime(time.strptime('YYYY-MM-DD HH:MM:SS', '%Y-%m-%d %H:%M:%S')))#e.g 2019-11-06 11:56:10 -> 1573012570
+    # unixtime = int(time.mktime(time.strptime('YYYY-MM-DD HH:MM:SS', '%Y-%m-%d %H:%M:%S')))  # e.g 2019-11-06 11:56:10 -> 1573012570
     GMT = 8  # 8 hour interval between taiwan(GMT+8) and GMT+0
     unixtime = int(time.mktime(time.strptime('' + date + ' ' + hour + ':' + minute + ':' + second + '', '%Y-%m-%d %H:%M:%S')))
     unixtime = unixtime - GMT * 60 * 60
@@ -320,11 +292,11 @@ def reorder():
             'order': [id1, id2, id3, ...],
         }
     '''
-    o = request.json.get('order')
-    if not o:
+    order = request.json.get('order')
+    if not order:
         return json_err('Order is empty'), 400
 
-    for idx, id in enumerate(o):
+    for idx, id in enumerate(order):
         id = str(id)
         lecture = Lecture.query.get(id)
         if lecture is None:
