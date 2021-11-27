@@ -62,7 +62,7 @@ def Friction(data):
 def setup():
     profile = {
         'dm_name': 'Ball-Spin',
-        'odf_list': ['Speed','Friction']
+        'odf_list': [Speed, Friction]
     }
     dai(profile, mac_addr, ida)
 

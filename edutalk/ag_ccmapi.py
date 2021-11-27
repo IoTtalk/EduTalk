@@ -4,12 +4,14 @@ from edutalk.exceptions import CCMAPIError
 
 log = logging.getLogger('edutalk.ag_ccmapi')
 
+
 def _json(api_name, payload):
     data = {
         "api_name": api_name,
         "payload": payload
     }
     return data
+
 
 '''
 APIs for "device"
@@ -20,23 +22,25 @@ APIs:
     device.unbind
 '''
 
+
 class device():
     def get(p_id, do_id, api_name='device.get'):
         payload = {
             "p_id": p_id,
             "do_id": do_id,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting Device info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
-
 
     def bind(p_id, do_id, d_id, api_name='device.bind'):
         payload = {
@@ -44,13 +48,15 @@ class device():
             "do_id": do_id,
             "d_id": d_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Bind Device failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -60,17 +66,18 @@ class device():
             "p_id": p_id,
             "do_id": do_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
-                raise CCMAPIError 
+                raise CCMAPIError
         except CCMAPIError:
-            log.exception("Bind Device failed.")
+            log.exception("Unbind Device failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
-
 
 
 '''
@@ -82,20 +89,23 @@ APIs:
     project.delete
     project.on
     project.off
-'''  
+'''
+
 
 class project():
     def get(p_id, api_name='project.get'):
         payload = {
             "p_id": p_id,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting Project info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -104,13 +114,15 @@ class project():
         payload = {
             "p_name": name,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create Project failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -119,13 +131,15 @@ class project():
         payload = {
             "p_id": p_id,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Delete Project failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -134,13 +148,15 @@ class project():
         payload = {
             "p_id": p_id,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Turn on Project failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -149,13 +165,15 @@ class project():
         payload = {
             "p_id": p_id,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Turn off Project failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -169,7 +187,8 @@ APIs:
     deviceobject.create
     deviceobject.delete
 
-'''  
+'''
+
 
 class deviceobject():
     def get(p_id, do_id, api_name='deviceobject.get'):
@@ -177,25 +196,27 @@ class deviceobject():
             "p_id": p_id,
             "do_id": do_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting Deviceobject info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
 
-    def create(p_id, dm_name: str, dfs: list= [] ,api_name='deviceobject.create'):
+    def create(p_id, dm_name: str, dfs: list = [], api_name='deviceobject.create'):
         payload = {
             "p_id": p_id,
             "dm_name": dm_name,
             "dfs": dfs
         }
 
-        if not dfs: # if dfs is not assigned, get all dfs
+        if not dfs:  # if dfs is not assigned, get all dfs
             payload['dfs'] = [df['df_name'] for df in devicemodel.get(dm_name)['df_list']]
 
         try:
@@ -204,22 +225,26 @@ class deviceobject():
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create Deviceobject failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
 
-    def delete(p_id, do_id ,api_name='deviceobject.create'):
+    def delete(p_id, do_id, api_name='deviceobject.create'):
         payload = {
             "p_id": p_id,
             "do_id": do_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create Deviceobject failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -233,20 +258,22 @@ APIs:
     devicefeature.create
     devicefeature.update
 
-'''  
+'''
+
 
 class devicefeature():
     def get(df, api_name='devicefeature.get'):
         payload = {
             "df": df
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting Devicefeature info failed.")
+            print(response)
             return response
         except Exception as err:
             log.exception(err)
@@ -260,44 +287,52 @@ class devicefeature():
             "comment": comment,
             "category": category
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create Devicefeature info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
 
     def get_or_create(df_name: str, typ, parameter):
         try:
-            return devicefeature.get(df_name)
-        except CCMAPIError as e:
+            res = devicefeature.get(df_name)
+            if "state" in res and res['state'] == 'error':
+                raise CCMAPIError
+        except CCMAPIError:
             log.exception("Get or create Devicefeature info failed.")
+            return devicefeature.create(name=df_name,
+                                        type=typ,
+                                        parameter=parameter)
         print("Did not get")
-        return devicefeature.get(devicefeature.create(df_name, typ, parameter))
+        return
 
-
-    def update(df_id, df_name, df_type, parameter, api_name='devicefeature.update'):
+    def update(df_id, df_name, df_type, parameter, comment, df_category, api_name='devicefeature.update'):
         payload = {
             "df_id": df_id,
             "df_name": df_name,
             "df_type": df_type,
-            "parameter": parameter
+            "parameter": parameter,
+            "comment": comment,
+            "category": df_category
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Update Devicefeature info failed.")
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
-
 
 
 '''
@@ -308,7 +343,8 @@ APIs:
     networkapplication.create
     networkapplication.delete
 
-'''  
+'''
+
 
 class networkapplication():
     def get(p_id, na_id, api_name='networkapplication.get'):
@@ -316,13 +352,15 @@ class networkapplication():
             "p_id": p_id,
             "na_id": na_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Getting NetworkApplication info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -332,13 +370,15 @@ class networkapplication():
             "p_id": p_id,
             "joins": joins
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create NetworkApplication info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -348,17 +388,18 @@ class networkapplication():
             "p_id": p_id,
             "na_id": na_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
-                raise CCMAPIError   
+                raise CCMAPIError
         except CCMAPIError:
-            log.exception("Deley NetworkApplication info failed.")
+            log.exception("Delete NetworkApplication info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
-
 
 
 '''
@@ -370,14 +411,15 @@ APIs:
     devicemodel.delete
     devicemodel.update
 
-'''  
+'''
+
 
 class devicemodel():
     def get(dm, api_name='devicemodel.get'):
         payload = {
             "dm": dm
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -385,7 +427,7 @@ class devicemodel():
             return response['result']
         except CCMAPIError:
             log.exception("Getting DeviceModel info failed.")
-            return status
+            return response
         except Exception as err:
             log.exception(err)
 
@@ -394,14 +436,15 @@ class devicemodel():
             "dm_name": name,
             "dfs": dfs
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
-            # print("response: ", response)
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create DeviceModel info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
@@ -410,30 +453,34 @@ class devicemodel():
         payload = {
             "dm": dm
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Delete DeviceModel info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']
 
     def update(dm_id, dm_name, dfs, api_name='devicemodel.update'):
         payload = {
-            "dn_id": dm_id,
+            "dm_id": dm_id,
             "dm_name": dm_name,
             "dfs": dfs
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
                 raise CCMAPIError
         except CCMAPIError:
             log.exception("Create DeviceModel info failed.")
+            print(response)
+            return response
         except Exception as err:
             log.exception(err)
         return response['result']

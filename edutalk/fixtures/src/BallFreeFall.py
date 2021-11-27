@@ -16,7 +16,7 @@ def setup():
     profile = {
         'dm_name' : 'BallFreeFall',
         'idf_list': [],
-        'odf_list' : ['Gravity', 'Radius'],
+        'odf_list' : [Gravity, Radius],
     }
     dai(profile, mac_addr, ida)
 

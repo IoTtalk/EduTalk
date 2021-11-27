@@ -1,17 +1,15 @@
 import logging
 import re
 
-from flask import Blueprint, render_template, session, abort, jsonify, request, redirect
-from flask_login import login_user
+from flask import Blueprint, render_template, session, request, redirect, url_for
+from flask_login import login_user, current_user
 
 # from edutalk import device
 from edutalk.config import config
-from edutalk.models import LectureProject, Lecture, User
+from edutalk.models import LectureProject, Lecture, User, MacAddress
 from edutalk.utils import login_required
 from edutalk.ag_ccmapi import device, devicefeature
 from edutalk.exceptions import CCMAPIError
-
-from flask_login import current_user
 
 app = Blueprint('rc', __name__)
 db = config.db
@@ -35,6 +33,8 @@ def index(lec_id):
 
     lecture = Lecture.query.get(lec_id)
     x = LectureProject.get_by_lec_user(lecture, user)
+    if not x:
+        abort(404)
     df_list = {re.sub(r'_', r'-', x['df_name']): x for x in x.ido['df_list']}
     for df in df_list:
         df_info = devicefeature.get(df)
@@ -59,6 +59,9 @@ def index(lec_id):
 @app.route('/bind/<string:mac_addr>', methods=['POST'], strict_slashes=False)
 @login_required
 def bind(lec_id, mac_addr):
+    # record mac_addr to db
+    MacAddress.create(lec_id, mac_addr)
+
     lecture = Lecture.query.get(lec_id)
     x = LectureProject.get_by_lec_user(lecture, current_user)
     p_id = x.p_id

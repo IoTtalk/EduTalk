@@ -30,7 +30,7 @@ $(function () {
         if (data) {return data;}\
       }")();
   });
-  csmapi.set_endpoint('http://edu.scratchtalk.tw:9999');
+  csmapi.set_endpoint(urls.csm_url);
 
   var profile = {
       'dm_name': dm_name,          
@@ -50,7 +50,6 @@ $(function () {
   
   function ida_init(){
     let url = urls.rc_bind(mac_addr);
-    
     $.ajax({
       url: url,
       type: 'POST',
@@ -69,7 +68,7 @@ $(function () {
   var ida = {
     'ida_init': ida_init,
   }; 
-
+  
   dai(profile, mac_addr, ida)
 
 //   const da = new iottalkjs.DAI({
@@ -141,7 +140,7 @@ function slider_handler() {
     onSlideEnd: function (position, value) {
       console.log('onSlideEnd:', this.identifier, value);
       let idf = this.$element.attr('data-idf-name');
-      console.log(typeof(idf))
+      // console.log(typeof(idf))
       dan.push(idf, [parseFloat(value)]);
     }
   });
@@ -149,7 +148,6 @@ function slider_handler() {
 
 // Shared function
 function push(idf_name, data, callback) {
-  console.log('push idf_name ', idf_name, data);
   if (!(data instanceof Array))
     data = [data];
   idf_data[idf_name] = data;

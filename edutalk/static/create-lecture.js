@@ -135,10 +135,10 @@ var app2 = new Vue({
             ret['min'] = self.df_list[odf]['min'];
             ret['max'] = self.df_list[odf]['max'];
             ret['default'] = self.df_list[odf]['default'];
-            if(ret['min'] != 0 || ret['max'] != 10 || ret['custom'] == 1){
-              // custom idf
-              ret['name'] = self.odm + '_' + ret['name'];
-            }
+            // if(ret['min'] != 0 || ret['max'] != 10 || ret['custom'] == 1){
+            //   // custom idf
+            //   ret['name'] = self.odm + '_' + ret['name'];
+            // }
             range_index++;
             break;
         }

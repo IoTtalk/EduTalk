@@ -4,21 +4,17 @@ import shutil
 import sys
 
 from argparse import ArgumentParser
-from contextlib import suppress
 from functools import partial
 
-import requests
 import yaml
+
+# from future import annotations  # test
 
 from edutalk import models
 from edutalk.config import config
 from edutalk.server import setup_db
-from edutalk.models import User, Group
 from edutalk import ag_ccmapi as ccmapiv0
-
 from edutalk.exceptions import CCMAPIError
-
-import logging
 
 log = logging.getLogger('edutalk.cli')
 
@@ -40,7 +36,6 @@ def load_fixtures(fname):
                 load_ccm_fixture(db, x)
 
         db.session.commit()
-        
 
 
 def load_model(db, x):
@@ -55,16 +50,25 @@ def load_ccm_fixture(db, x):
     tuple(map(partial(_get_or_create, f=f), x['records']))
 
 
-def _get_or_create(r: 'record', f: 'function'):
+def _get_or_create(r, f):
+    """
+    Args:
+        r: record
+        f: function
+    """
     try:
         res = f.get(r['name'])
         if "state" in res and res['state'] == 'error':
             raise CCMAPIError
-    except CCMAPIError as e:
-        # FIXME: maybe delete before create?
+        elif f == ccmapiv0.devicefeature:
+            f.update(df_id=res['df_id'],
+                     df_name=r['name'],
+                     df_type=r['type'],
+                     parameter=r['parameter'],
+                     comment=res['comment'],
+                     df_category=res['df_category'])
+    except CCMAPIError:
         f.create(**r)
-
-        
 
 
 # def login():

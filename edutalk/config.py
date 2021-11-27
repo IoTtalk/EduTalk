@@ -7,7 +7,7 @@ import logging
 import os
 
 from configparser import ConfigParser, ExtendedInterpolation
-from uuid import uuid4
+from six import string_types
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -38,14 +38,14 @@ class Config(object):
         'user': '',
         'passwd': '',
     }
-    __ccm_api = 'http://localhost:7788/api/v0'
-    __csm_api = 'http://localhost:9999'
-    __secret_key = ''
-    __client_id = ''
-    __client_secret = ''
-    __redirect_uri = ''
-    __discovery_endpoint = ''
-    __revocation_endpoint = ''
+    __ccm_api = 'https://edutalk-blackbox-test.iottalk.tw/ccm/api/v0'
+    __csm_api = 'https://edutalk-blackbox-test.iottalk.tw'
+    __secret_key = 'edutalk_secret_key'
+    __client_id = '9VDqwpinbjoKJjJxIgfJCQj0e6TgPTqIDo5EScDA'
+    __client_secret = 'aTPiNVlKKhqzM8mPMrjB8Cp1MopSd7R3fp7H51xFiAyj324B58snfUTf6uAxELxTz60Lm0yAev9nAYheJ0tMqiNHb3FwDfK9QoOGUSAw10wMhSOcPC2cDalBilLCbHWZJL0eKEzWcp7jkRx4usWuojCJ3YOXeAky'
+    __redirect_uri = 'https://os-edu-test.iottalk.tw/account/auth/callback'
+    __discovery_endpoint = 'https://dev-account.haohao.in/.well-known/openid-configuration'
+    __revocation_endpoint = 'https://dev-account.haohao.in/oauth2/v1/revoke/'
     __db = None
     __userdir = ''
     __app = None
@@ -208,7 +208,7 @@ class Config(object):
         val = val[:-1] if val.endswith('/') else val
         self.__csm_api = val
 
-    def csm_url(self, path: str =''):
+    def csm_url(self, path: str = ''):
         url = '{}/{}'.format(self.csm_api, path)
         return url[:-1] if url.endswith('/') else url
 
@@ -296,7 +296,7 @@ class Config(object):
         c = ConfigParser(interpolation=ExtendedInterpolation())
         c.read(path)
 
-        def set_(obj, c: 'config section', name, parse: 'function' =str):
+        def set_(obj, c: 'config section', name, parse: 'function' = str):
             try:
                 if isinstance(obj, dict):
                     opt = obj[name]
@@ -305,7 +305,7 @@ class Config(object):
                     opt = getattr(obj, name)
                     setattr(self, name, parse(c.get(name, opt)))
 
-            except (AttributeError, KeyError) as e:
+            except (AttributeError, KeyError):
                 log.warning('Skip unknown config `{}`'.format(name))
 
         if 'edutalk' in c:  # `edutalk` section
