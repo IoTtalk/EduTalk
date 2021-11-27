@@ -29,5 +29,5 @@ jobs:
       with:
         python-root: './edutalk/'
         flake8-flags: '--count --show-source --statistics --max-line-length=185 --ignore=W503,E115,F722,F821,F841 --exclude=.git,__pycache__,./edutalk/fixtures/src/,./edutalk/static'
-        mypy-flags: '--ignore-missing-imports'
+        mypy-flags: '--ignore-missing-imports --exclude=.git,__pycache__,./edutalk/fixtures/src/,./edutalk/static'
         skip-isort: true
