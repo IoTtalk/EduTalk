@@ -1,15 +1,12 @@
 import os
 
-from flask import Flask, request, session, render_template
-from flask_login import current_user, LoginManager
-from flask_session import Session
+from flask import Flask, render_template
+from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
-from libgravatar import Gravatar
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from edutalk.config import config
 from edutalk.models import Lecture, User
-
 from edutalk.account import app as account_app
 from edutalk.lecture import app as lecture_app
 from edutalk.vp import app as vp_app
@@ -30,10 +27,10 @@ def index():
     '''
         route for HomePage
     '''
-    uid = session.get('uid', -1)
+    # uid = session.get('uid', -1)
     return render_template('homepage.html',
-        new_admin=config.new_admin,
-        lesson_data=Lecture.list_())
+                           new_admin=config.new_admin,
+                           lesson_data=Lecture.list_())
 
 
 @app.url_defaults
@@ -69,7 +66,7 @@ def setup_db():
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     config.app = app  # this will initialize the db connection
-    import edutalk.models  # import the model declaration
+    # import edutalk.models  # import the model declaration
     config.db.create_all(app=app)
 
 

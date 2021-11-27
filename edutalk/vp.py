@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, session, abort, jsonify, request
+from flask import Blueprint, render_template, abort, jsonify, request
+from flask_login import current_user
 
 # from edutalk import device
 from edutalk.config import config
@@ -7,10 +8,9 @@ from edutalk.utils import login_required
 from edutalk.ag_ccmapi import device
 from edutalk.exceptions import CCMAPIError
 
-from flask_login import current_user
-
 app = Blueprint('vp', __name__)
 db = config.db
+
 
 @app.route('/', methods=['GET'], strict_slashes=False)
 @login_required
@@ -81,7 +81,7 @@ def code_default(lec_id):
 @app.route('/bind/<string:mac_addr>', methods=['POST'], strict_slashes=False)
 @login_required
 def bind(lec_id, mac_addr):
-    #record mac_addr to db
+    # record mac_addr to db
     MacAddress.create(lec_id, mac_addr)
 
     lecture = Lecture.query.get(lec_id)

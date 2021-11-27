@@ -7,7 +7,7 @@ import logging
 import os
 
 from configparser import ConfigParser, ExtendedInterpolation
-from uuid import uuid4
+from six import string_types
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -38,14 +38,14 @@ class Config(object):
         'user': '',
         'passwd': '',
     }
-    __ccm_api = 'http://localhost:7788/api/v0'
-    __csm_api = 'http://localhost:9999'
-    __secret_key = ''
-    __client_id = ''
-    __client_secret = ''
-    __redirect_uri = ''
-    __discovery_endpoint = ''
-    __revocation_endpoint = ''
+    __ccm_api = 'https://{ccm_domain_name}/api/v0' #change to the domain you use
+    __csm_api = 'https://{csm_domain_name}' #change to the domain you use
+    __secret_key = 'edutalk_secret_key'
+    __client_id = 'your OAuth App ID'
+    __client_secret = 'your OAuth App secret'
+    __redirect_uri = 'http(s)://domain or IP/account/auth/callback'
+    __discovery_endpoint = 'OAuth discover Endpoint'
+    __revocation_endpoint = 'OAuth revoke token Endpoint'
     __db = None
     __userdir = ''
     __app = None
@@ -208,7 +208,7 @@ class Config(object):
         val = val[:-1] if val.endswith('/') else val
         self.__csm_api = val
 
-    def csm_url(self, path: str =''):
+    def csm_url(self, path: str = ''):
         url = '{}/{}'.format(self.csm_api, path)
         return url[:-1] if url.endswith('/') else url
 
@@ -296,7 +296,7 @@ class Config(object):
         c = ConfigParser(interpolation=ExtendedInterpolation())
         c.read(path)
 
-        def set_(obj, c: 'config section', name, parse: 'function' =str):
+        def set_(obj, c: 'config section', name, parse: 'function' = str):
             try:
                 if isinstance(obj, dict):
                     opt = obj[name]
@@ -305,7 +305,7 @@ class Config(object):
                     opt = getattr(obj, name)
                     setattr(self, name, parse(c.get(name, opt)))
 
-            except (AttributeError, KeyError) as e:
+            except (AttributeError, KeyError):
                 log.warning('Skip unknown config `{}`'.format(name))
 
         if 'edutalk' in c:  # `edutalk` section

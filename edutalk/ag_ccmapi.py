@@ -4,12 +4,14 @@ from edutalk.exceptions import CCMAPIError
 
 log = logging.getLogger('edutalk.ag_ccmapi')
 
+
 def _json(api_name, payload):
     data = {
         "api_name": api_name,
         "payload": payload
     }
     return data
+
 
 '''
 APIs for "device"
@@ -20,13 +22,14 @@ APIs:
     device.unbind
 '''
 
+
 class device():
     def get(p_id, do_id, api_name='device.get'):
         payload = {
             "p_id": p_id,
             "do_id": do_id,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -39,14 +42,13 @@ class device():
             log.exception(err)
         return response['result']
 
-
     def bind(p_id, do_id, d_id, api_name='device.bind'):
         payload = {
             "p_id": p_id,
             "do_id": do_id,
             "d_id": d_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -64,11 +66,11 @@ class device():
             "p_id": p_id,
             "do_id": do_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
-                raise CCMAPIError 
+                raise CCMAPIError
         except CCMAPIError:
             log.exception("Unbind Device failed.")
             print(response)
@@ -76,7 +78,6 @@ class device():
         except Exception as err:
             log.exception(err)
         return response['result']
-
 
 
 '''
@@ -88,14 +89,15 @@ APIs:
     project.delete
     project.on
     project.off
-'''  
+'''
+
 
 class project():
     def get(p_id, api_name='project.get'):
         payload = {
             "p_id": p_id,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -112,7 +114,7 @@ class project():
         payload = {
             "p_name": name,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -129,7 +131,7 @@ class project():
         payload = {
             "p_id": p_id,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -146,7 +148,7 @@ class project():
         payload = {
             "p_id": p_id,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -163,7 +165,7 @@ class project():
         payload = {
             "p_id": p_id,
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -185,7 +187,8 @@ APIs:
     deviceobject.create
     deviceobject.delete
 
-'''  
+'''
+
 
 class deviceobject():
     def get(p_id, do_id, api_name='deviceobject.get'):
@@ -193,7 +196,7 @@ class deviceobject():
             "p_id": p_id,
             "do_id": do_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -206,14 +209,14 @@ class deviceobject():
             log.exception(err)
         return response['result']
 
-    def create(p_id, dm_name: str, dfs: list= [] ,api_name='deviceobject.create'):
+    def create(p_id, dm_name: str, dfs: list = [], api_name='deviceobject.create'):
         payload = {
             "p_id": p_id,
             "dm_name": dm_name,
             "dfs": dfs
         }
 
-        if not dfs: # if dfs is not assigned, get all dfs
+        if not dfs:  # if dfs is not assigned, get all dfs
             payload['dfs'] = [df['df_name'] for df in devicemodel.get(dm_name)['df_list']]
 
         try:
@@ -228,12 +231,12 @@ class deviceobject():
             log.exception(err)
         return response['result']
 
-    def delete(p_id, do_id ,api_name='deviceobject.create'):
+    def delete(p_id, do_id, api_name='deviceobject.create'):
         payload = {
             "p_id": p_id,
             "do_id": do_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -255,14 +258,15 @@ APIs:
     devicefeature.create
     devicefeature.update
 
-'''  
+'''
+
 
 class devicefeature():
     def get(df, api_name='devicefeature.get'):
         payload = {
             "df": df
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -283,7 +287,7 @@ class devicefeature():
             "comment": comment,
             "category": category
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -301,14 +305,13 @@ class devicefeature():
             res = devicefeature.get(df_name)
             if "state" in res and res['state'] == 'error':
                 raise CCMAPIError
-        except CCMAPIError as e:
+        except CCMAPIError:
             log.exception("Get or create Devicefeature info failed.")
             return devicefeature.create(name=df_name,
                                         type=typ,
                                         parameter=parameter)
         print("Did not get")
         return
-
 
     def update(df_id, df_name, df_type, parameter, comment, df_category, api_name='devicefeature.update'):
         payload = {
@@ -319,7 +322,7 @@ class devicefeature():
             "comment": comment,
             "category": df_category
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -332,8 +335,6 @@ class devicefeature():
         return response['result']
 
 
-
-
 '''
 APIs for "networkapplication"
 
@@ -342,7 +343,8 @@ APIs:
     networkapplication.create
     networkapplication.delete
 
-'''  
+'''
+
 
 class networkapplication():
     def get(p_id, na_id, api_name='networkapplication.get'):
@@ -350,7 +352,7 @@ class networkapplication():
             "p_id": p_id,
             "na_id": na_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -368,7 +370,7 @@ class networkapplication():
             "p_id": p_id,
             "joins": joins
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -386,11 +388,11 @@ class networkapplication():
             "p_id": p_id,
             "na_id": na_id
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
-                raise CCMAPIError   
+                raise CCMAPIError
         except CCMAPIError:
             log.exception("Delete NetworkApplication info failed.")
             print(response)
@@ -398,7 +400,6 @@ class networkapplication():
         except Exception as err:
             log.exception(err)
         return response['result']
-
 
 
 '''
@@ -410,14 +411,15 @@ APIs:
     devicemodel.delete
     devicemodel.update
 
-'''  
+'''
+
 
 class devicemodel():
     def get(dm, api_name='devicemodel.get'):
         payload = {
             "dm": dm
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -434,7 +436,7 @@ class devicemodel():
             "dm_name": name,
             "dfs": dfs
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -451,7 +453,7 @@ class devicemodel():
         payload = {
             "dm": dm
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
@@ -470,7 +472,7 @@ class devicemodel():
             "dm_name": dm_name,
             "dfs": dfs
         }
-        
+
         try:
             status, response = utils.ag_post(_json(api_name, payload))
             if not status:
