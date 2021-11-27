@@ -38,8 +38,8 @@ class Config(object):
         'user': '',
         'passwd': '',
     }
-    __ccm_api = 'https://{ccm_domain_name}/api/v0' #change to the domain you use
-    __csm_api = 'https://{csm_domain_name}' #change to the domain you use
+    __ccm_api = 'https://{ccm_domain_name}/api/v0'  # change to the domain you use
+    __csm_api = 'https://{csm_domain_name}'  # change to the domain you use
     __secret_key = 'edutalk_secret_key'
     __client_id = 'your OAuth App ID'
     __client_secret = 'your OAuth App secret'
