@@ -28,6 +28,6 @@ jobs:
       uses: alexanderdamiani/pylinter@v1.3.0
       with:
         python-root: './edutalk/'
-        flake8-flags: '--count --show-source --statistics --max-line-length=185 --ignore=W503,E115,F722,F821,F841 --exclude=.git,__pycache__,./edutalk/fixtures/src/,./edutalk/static'
-        mypy-flags: '--exclude ./edutalk/(fixtures|static)/'
+        flake8-flags: '--count --show-source --statistics --max-line-length=185 --ignore=W503,E115,F722,F821,F841 --exclude=.git,__pycache__,./fixtures/src/,./static/'
+        mypy-flags: '--exclude ./(fixtures|static)/'
         skip-isort: true
