@@ -20,7 +20,7 @@ from edutalk.models import Lecture, Template, LectureProject, MacAddress
 from edutalk.utils import login_required, teacher_required, json_err
 
 from edutalk.exceptions import CCMAPIError
-from edutalk.ag_ccmapi import devicemodel, devicefeature
+from edutalk.ag_ccmapi import devicemodel, devicefeature, device
 
 from requests import get
 from openpyxl import Workbook
