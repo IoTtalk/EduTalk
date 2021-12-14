@@ -163,25 +163,26 @@ function push_sensor_value(){
     ];
 
     name_info.forEach(function(info){
-        push_handler(info[0], info[1], info[2], info[3]);
-    });
-
-    setTimeout(push_sensor_value, push_interval);
-
-    function push_handler(name, btn_name, obj, type){
-
+        const name = info[0]
+        const btn_name = info[1]
+        const obj = info[2]
+        const type = info[3]
+        const dateTime = new Date().getTime();
         if($.inArray(name, idf_names) == -1 || $('#'+ btn_name +'_btn').text() == 'off'){
             return;
         }
         if(type == 'morsensor'){
+            obj.time = dateTime
             push(name, [obj.x, obj.time]);
             return;
         }
         if(obj.x && obj.y && obj.z){
+            obj.time = dateTime
             push(name, [obj.x, obj.y, obj.z, obj.time]);
         }
+    });
 
-    }
+    setTimeout(push_sensor_value, push_interval);
 }
 
 function update_layout() {

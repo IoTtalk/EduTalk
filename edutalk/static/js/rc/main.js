@@ -19,21 +19,20 @@ $(function () {
   slider_handler();
 
   idfs = [];
+    
   idf_list.forEach(idf => {
-    idfs.push(idf[0])
-  });
-
-  idf_list.forEach(idf => {
-    idf[0] = new Function(
-      "return function " + idf[0] + "() {\
+    let fn = new Function(
+      "return function " + idf[0].replace('-I', '_I') + "() {\
         let data = idf_data[arguments.callee.name];\
         if (data) {return data;}\
       }")();
+    idfs.push(fn);
   });
+
   csmapi.set_endpoint(urls.csm_url);
 
   var profile = {
-      'dm_name': dm_name,          
+      'dm_name': dm_name,
       'idf_list': idfs,
       'odf_list':[],
       'd_name': dev,
@@ -68,33 +67,9 @@ $(function () {
   var ida = {
     'ida_init': ida_init,
   }; 
-  
+
   dai(profile, mac_addr, ida)
-
-//   const da = new iottalkjs.DAI({
-//     apiUrl: urls.csm_url,
-//     deviceModel: dm_name,
-//     deviceName: dev,
-//     idfList: idf_list,
-//     odfList: [],
-//     pushInterval: 0.02,
-//     onRegister: onRegister,
-//   });
-//   da.run();
-// });
-
-// function onRegister() {
-//   url = urls.rc_bind(this.appID)
-//   $.post(url, {
-//     dataType: 'json',
-//   })
-//     .done(function () {
-//       console.log('device binding success')
-//     })
-//     .fail(function () {
-//       console.log('device binding failed')
-//     })
-// }
+})
 
 function input_num_handler() {
   $('.submit-btn').on('click', function () {
@@ -104,7 +79,7 @@ function input_num_handler() {
     console.log('current value', current_value);
     // check because mobile input type=num can still type in text
     if (current_value) {
-      dan.push(idf, parseFloat(current_value));
+      push(idf, parseFloat(current_value));
     } else {
       $(this).siblings('.error-msg').show();
     }
@@ -140,8 +115,8 @@ function slider_handler() {
     onSlideEnd: function (position, value) {
       console.log('onSlideEnd:', this.identifier, value);
       let idf = this.$element.attr('data-idf-name');
-      // console.log(typeof(idf))
-      dan.push(idf, [parseFloat(value)]);
+      // console.log(typeof(idf), idf)
+      push(idf, [parseFloat(value)]);
     }
   });
 }
@@ -150,6 +125,5 @@ function slider_handler() {
 function push(idf_name, data, callback) {
   if (!(data instanceof Array))
     data = [data];
-  idf_data[idf_name] = data;
+  idf_data[idf_name.replace('-I', '_I')] = data;
 }
-})

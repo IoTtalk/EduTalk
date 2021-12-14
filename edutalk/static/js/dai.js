@@ -11,24 +11,26 @@ const dai = function (profile, mac_addr, ida) {
         if(odf_name[odf_name.length-2] == '_'){
             odf_name = odf_name.substr(0, odf_name.length-2) + '-' + odf_name.substr(odf_name.length-1);
         }
+        console.log(odf_name);
         odf_func[odf_name] = profile.odf_list[i];
 		profile.odf_list[i] = odf_name;
 		profile['df_list'].push(odf_name);
     }
 	
     for (var i = 0; i < profile.idf_list.length; i++) {
-        var idf_name = profile.idf_list[i];
-        // if(idf_name[idf_name.length-2] == '_'){
-        //     idf_name = idf_name.substr(0, idf_name.length-2) + '-' + idf_name.substr(idf_name.length-1);
-        // }
-        // idf_func[idf_name] = profile.idf_list[i];
-		// profile.idf_list[i] = idf_name;
+        console.log(profile.idf_list[i]);
+        idf_name = profile.idf_list[i].name;
+        if(idf_name[idf_name.length-2] == '_'){
+            idf_name = idf_name.substr(0, idf_name.length-2) + '-' + idf_name.substr(idf_name.length-1);
+        }
+        idf_func[idf_name] = profile.idf_list[i];
+		profile.idf_list[i] = idf_name;
 		profile['df_list'].push(idf_name);
     }
 	
-    function _push(idf_name) {
-	    // data = idf_func[idf_name]();
-	    // if (data!=undefined) dan.push(idf_name, data);
+    function push(idf_name) {
+	    data = idf_func[idf_name]();
+	    if (data!=undefined) dan.push(idf_name, data);
 	}
 	
     function pull(odf_name, data) {
@@ -71,5 +73,5 @@ const dai = function (profile, mac_addr, ida) {
     window.onclose = deregister;
     window.onpagehide = deregister;
 
-    dan.init(_push, pull, csmapi.get_endpoint(), mac_addr, profile, init_callback);
+    dan.init(push, pull, csmapi.get_endpoint(), mac_addr, profile, init_callback);
 };
